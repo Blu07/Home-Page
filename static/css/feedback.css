@@ -1,4 +1,59 @@
 body {
   background-image: none;
+  background-color: white;
+  margin: 0px;
+  height: 100svh;
+}
+
+main {
+  display: block;
+  width: 100svw;
+  height: 100svh;
+  overflow-y: auto;
+  overflow-x: auto;
+  overflow-anchor: auto;
+}
+main #top-image {
+  display: block;
+  position: absolute;
+  top: 0px;
+  height: calc(100svh - 80px);
+  width: 100svw;
+}
+main #top-image img {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  z-index: 1;
+}
+main #top-image #top-image-shade {
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  background-image: linear-gradient(270deg, black, transparent);
+}
+main #top-bar {
+  position: sticky;
+  top: 0px;
+  width: 100svw;
+  height: 80px;
+  background-color: bisque;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(74, 62, 62, 0.4);
+  border-radius: 10px;
+  border: 4px solid white;
+}
+
+::-webkit-scrollbar-track {
   background-color: transparent;
 }

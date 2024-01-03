@@ -1,5 +1,5 @@
-import secrets
 from flask import Flask, render_template, url_for
+import secrets
 
 secret_key = secrets.token_hex(16)
 

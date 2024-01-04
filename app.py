@@ -31,16 +31,14 @@ def about_me():
 
 @app.route('/load_bar_image/')
 def load_bar_image():
-    height = int(request.args.get('height'))
-    width = int(request.args.get('width'))
+    image_height = int(request.args.get('image_height'))
+    bar_height = int(request.args.get('bar_height'))
+    width = int(request.args.get('screen_width'))
+    image_filename = str(request.args.get('filename'))
     
-    
-    image_filename = 'Night-Moon.jpg'
-    bar_name = extract_colors.sections(image_filename, width, height, 10)
-    print(bar_name)
-    image_url = url_for('static', filename=bar_name)
-    return {'image_url': image_url}
+    colors = extract_colors.sections(image_filename, 10, image_height, bar_height, width)
 
+    return colors
 
 
 if __name__ == '__main__':

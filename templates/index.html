@@ -13,7 +13,7 @@
     <main>
         {% block main %}
         <div id="top-image">
-            <img src="{{ url_for('static', filename='images/Night-Moon.jpg') }}" alt="Favicon">
+            <img id="main-image" src="{{ url_for('static', filename='images/Night-Moon.jpg') }}" alt="Main Image">
         </div>
         <div id="top-bar">
             <a href="#portfolio"> PORTFOLIO </a>
@@ -68,89 +68,6 @@
         {% endblock %}
 </main>
 
-    <script>
-        window.onload = () => {
-            let top_image_element = document.getElementById('top-image');
-            let height = top_image_element.clientHeight;
-            let width = top_image_element.clientWidth;
-            
-            let load_url = `/load_bar_image/?height=${height}&width=${width}`
-            
-            // Fetch data from a URL
-            fetch(load_url)
-                .then(response => response.json())
-                .then(data => {
-                    // Handle the data
-                    document.getElementById("test").innerHTML = data.image_data;
-                })
-                .catch(error => {
-                    // Handle errors
-                    console.error('Error fetching data:', error);
-                });
-            };
-
-
-        
-        
-        
-        
-        // Add an 'active' class to the clicked link
-        document.getElementById("top-bar").addEventListener("click", (event) => {
-            if (event.target.tagName === "A") {
-                // Remove 'active' class from all links
-                document.querySelectorAll("#top-bar a").forEach((link) => {
-                    link.classList.remove("active");
-                });
-
-                // Add 'active' class to the clicked link
-                event.target.classList.add("active");
-            }
-        });
-
-       // Get all section elements
-        const sections = document.querySelectorAll('section');
-
-        // Function to check which section is in view
-        function updateActiveLink() {
-            let scrollPosition = document.querySelector('main').scrollTop;
-            let offset = 300;
-            console.log(scrollPosition)
-
-
-            // If at the top, deactivate all links
-            if (scrollPosition <= window.innerHeight - offset) {
-                document.querySelectorAll("#top-bar a").forEach((link) => {
-                    link.classList.remove("active");
-                });
-                return;
-            }
-
-            sections.forEach((section, index) => {
-                const top = section.offsetTop - offset;
-                const bottom = top + section.offsetHeight;
-
-                if (scrollPosition >= top && scrollPosition < bottom) {
-                    // Remove 'active' class from all links
-                    document.querySelectorAll("#top-bar a").forEach((link) => {
-                        link.classList.remove("active");
-                    });
-
-                    // Add 'active' class to the corresponding link
-                    document.querySelectorAll("#top-bar a")[index].classList.add("active");
-                }
-            });
-        }
-
-        // Add scroll event listener
-        window.addEventListener('wheel', () => {
-            // Throttle the function to improve performance
-            clearTimeout(window.scrollTimeout);
-            window.scrollTimeout = setTimeout(updateActiveLink, 100);
-            
-        });
-        // Call the function initially to set the initial active link
-        updateActiveLink();
-    </script>
-
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>

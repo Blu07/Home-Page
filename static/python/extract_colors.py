@@ -2,41 +2,42 @@ import cv2
 import os
 import numpy as np
 from sklearn.cluster import KMeans
+from pprint import pprint
+from collections import Counter
 
 
 
-
-def palette_KMeans(image):
-    clt = KMeans(n_clusters=1, n_init=1)
+def palette_KMeans(image, n_clt=10):
+    clt = KMeans(n_clusters=n_clt, n_init=1)
     clt.fit(image.reshape(-1, 3))
     
+    labels = clt.cluster_centers_
+    palette = clt.cluster_centers_.astype(int)
 
-    palette = clt.labels_
-
-    return palette
+    return labels, palette
 
 def BGR2RGB(BGR: tuple):
     return (BGR[2], BGR[1], BGR[0])
 
 
 
-def get_color_sections(row_image, bar_height, target_w, section_num, pixel_ratio):
+def get_color_sections(row_image, w, section_num, pixel_ratio=1):
     """
     Get the most common color from each vertical section the image.
     """
 
     most_common_colors = {}
 
-    section_width = int(np.floor(target_w * pixel_ratio / section_num))
+    section_width = int(np.floor(w * pixel_ratio / section_num))
     for i in range(section_num):
         section_image = row_image[:, section_width * i:section_width * (i + 1)]
         
         BGR = np.average(section_image, axis=(0,1))
         RGB = (int(BGR[2]), int(BGR[1]), int(BGR[0]))
         
-        most_common_colors.update({i: RGB})
+        most_common_colors.update({f"sec{i}": RGB})
     
-    print(most_common_colors)
+    #print(most_common_colors)
         
     return most_common_colors
 
@@ -49,7 +50,7 @@ def crop_to_bar():
 
 
 def sections(filename, section_num,  target_h=None, bar_height=None, target_w=None):
-    filepath = os.path.join('static', 'images', filename)
+    filepath = os.path.join('static', 'images', 'main_images', filename)
     image = cv2.imread(filepath)
     h, w, _ = image.shape
     
@@ -83,16 +84,48 @@ def sections(filename, section_num,  target_h=None, bar_height=None, target_w=No
     # Row
     bar_height = int(max(100, h) * pixel_ratio) if bar_height is None else int(bar_height * pixel_ratio)
     row_image = cropped_image[h - bar_height:h, 0:w]
-    
+    row_image = cv2.flip(row_image, 0)
 
-    most_common_colors = get_color_sections(row_image, bar_height, target_w, section_num, pixel_ratio)
+    most_common_colors = get_color_sections(row_image, target_w, section_num, pixel_ratio)
 
 
     # cv2.imwrite("static/images/shown_image.jpg", cropped_image)
-    # cv2.imwrite("static/images/bar_image.jpg", row_image)
+    cv2.imwrite("static/images/bar_image.jpg", row_image)
     return most_common_colors
     
 
+
+
+def main_color(filename):
+    filepath = os.path.join("static", "images", "main_images", filename)
+    image = cv2.imread(filepath)
+    image.resize(501, 501)
+    
+    k_cluster = KMeans(n_clusters=5, n_init=2)
+    k_cluster.fit(image.reshape(-1, 3))
+
+    n_pixels = len(k_cluster.labels_)
+    counter = Counter(k_cluster.labels_) # count how many pixels per cluster
+    perc = {}
+   
+    for i in counter:
+        perc[i] = np.round(counter[i]/n_pixels, 2)
+    perc = dict(sorted(perc.items(), key=lambda item: item[1], reverse=True))
+   
+    most_used_idx = max(perc, key=perc.get)
+    primary_color_BGR = k_cluster.cluster_centers_.astype(int)[most_used_idx]
+
+    B, G, R = primary_color_BGR
+    
+
+    return f"rgb({R}, {G}, {B})"
+
+
 if __name__ == '__main__':
-    colors = sections("Night-Moon.jpg", 10, 50, 60)
+    
+    
+    
+    colors = main_color("Night-Moon.jpg")
     print(colors)
+
+

@@ -7,15 +7,29 @@
     <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../static/css/index.css">
     <title>Hjemmeside</title>
+
+    <style>
+        main {
+            background-color: {{ main_color }};
+        }
+        #top-bar {
+            background-color: {{ main_color }};
+        }
+    </style>
+
 </head>
 <body>
     
-    <main>
+    <main id="main">
         {% block main %}
-        <div id="top-image">
-            <img id="main-image" src="{{ url_for('static', filename='images/Night-Moon.jpg') }}" alt="Main Image">
+        <div id="top-image" class="image-behind-scrollbar">
+            <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
+            <button id="image-btn" onclick="changeMainImage()">
+                <img id="image-btn-img" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
+                <p id="image-btn-p">Change Image</p>
+            </button>
         </div>
-        <div id="top-bar">
+        <div id="top-bar" class="image-behind-scrollbar" style="background-size: 100% 100%">
             <a href="#portfolio"> PORTFOLIO </a>
             <a href="#about-me"> ABOUT ME </a>
             <a href="#feedback"> FEEDBACK </a>

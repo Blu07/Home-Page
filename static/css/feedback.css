@@ -1,7 +1,8 @@
 body {
   background-image: none;
-  background-color: #3498db;
+  background-color: rgb(247, 233, 224);
   margin: 0px;
+  color: rgb(51, 42, 42);
   height: 100svh;
 }
 
@@ -14,7 +15,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent calc(99.8% - 15px), #3498db calc(100% - 15px));
+  background: linear-gradient(90deg, transparent calc(99.8% - 15px), rgb(247, 233, 224) calc(100% - 15px));
 }
 
 main {
@@ -39,10 +40,28 @@ main #top-image #main-image {
      object-fit: cover;
 }
 main #top-image button {
-  background-color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
   position: absolute;
-  top: 300px;
-  left: 50%;
+  bottom: 50px;
+  right: 50px;
+  width: -moz-min-content;
+  width: min-content;
+  height: -moz-min-content;
+  height: min-content;
+  border: 1px solid goldenrod;
+  border-radius: 10px;
+}
+main #top-image button img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  width: 90%;
+  height: 90%;
+}
+main #top-image button p {
+  font-size: xx-small;
 }
 main #top-bar {
   display: flex;
@@ -64,21 +83,21 @@ main #top-bar a {
   font-weight: 1000;
   text-align: center;
   text-decoration: none;
-  color: #3498db;
-  background-color: #ecf0f1;
-  border: 2px solid #e74c3c;
+  color: rgb(247, 233, 224);
+  background-color: rgb(51, 42, 42);
+  border: 2px solid goldenrod;
   border-radius: 8px;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 main #top-bar a:hover {
-  color: #ecf0f1;
-  background-color: #3498db;
-  border-color: #888;
+  color: rgb(51, 42, 42);
+  background-color: rgb(247, 233, 224);
+  border-color: firebrick;
 }
 main #top-bar a.active {
-  color: #555;
-  background-color: #f02727;
-  border-color: #888;
+  color: rgb(51, 42, 42);
+  background-color: rgb(247, 233, 224);
+  border-color: goldenrod;
 }
 
 ::-webkit-scrollbar {
@@ -89,9 +108,9 @@ main #top-bar a.active {
 ::-webkit-scrollbar-thumb {
   background-color: rgba(74, 62, 62, 0.4);
   border-radius: 10px;
-  border: 4px solid #3498db;
+  border: 4px solid rgb(247, 233, 224);
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #3498db;
+  background-color: rgb(247, 233, 224);
 }

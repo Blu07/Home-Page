@@ -9,13 +9,16 @@
     <title>Hjemmeside</title>
 
     <style>
-        main {
-            background-color: {{ main_color }};
-        }
         #top-bar {
-            background-color: {{ main_color }};
+            background-color: {{ primary_color }};
         }
-    </style>
+        main {
+            background-color: {{ primary_color }};
+        }
+        #image-btn {
+            background-color: {{ primary_color }};
+        }
+        </style>
 
 </head>
 <body>
@@ -35,9 +38,8 @@
             <a href="#feedback"> FEEDBACK </a>
         </div>
         
-        <a id="test" href="/portfolio">My Portfolio Website</a>
-
-
+        <a href="/portfolio">My Portfolio Page</a>
+        
         <section id="portfolio">
             This is the portfolio preview.
 

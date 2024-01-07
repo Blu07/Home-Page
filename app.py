@@ -12,14 +12,12 @@ app.secret_key = secret_key
 
 @app.route('/')
 def index():
-    
     main_image_filename = main_image()
-    main_color = extract_colors.main_color(main_image_filename)
+    clr_schm = color_scheme(main_image_filename)
+    primary_color = clr_schm["primary_color"]
     main_image_url = url_for('static', filename=f'images/main_images/{main_image_filename}')
 
-    print(main_image_filename, main_color)
-    
-    return render_template('index.html', main_image_url=main_image_url, main_color=main_color)
+    return render_template('index.html', main_image_url=main_image_url, primary_color=primary_color)
 
 
 @app.route('/feedback')
@@ -36,17 +34,22 @@ def portfolio():
 def about_me():
     return render_template("/aboutme.html")
 
-@app.route("/color_scheme")
-def color_scheme():
-    filename = request.args.get("current")
-    main_color = extract_colors.main_color(filename)
-    return {"main_color": main_color}
+
+@app.route("/color_scheme/<string:filename>")
+def color_scheme(filename):
+    if not filename:
+        filename = request.args.get("current")
+    clr_schm = extract_colors.main_color(filename)
+    return clr_schm
+
 
 @app.route('/main_image')
 def main_image():
-    for _, _, filenames in os.walk('static/images/main_images'):
-        args = request.args
-        excluded_img = args.get('current')
+    args = request.args
+    excluded_img = args.get('current')
+    
+    
+    for _, _, filenames in os.walk(f'static/images/main_images'):
         
         if not excluded_img:
             return random.choice(filenames)
@@ -54,12 +57,12 @@ def main_image():
         filenames.remove(excluded_img)
         new_image_filename = random.choice(filenames)
 
-        return {'new_image_filename': new_image_filename}
+        clr_sch = extract_colors.main_color(new_image_filename)
 
-@app.route('/load_clr_schm/')
+        return {'new_image_filename': new_image_filename, 'color_scheme': clr_sch}
 
 
-@app.route('/load_bar_image/')
+@app.route('/load_bar_image')
 def load_bar_image():
     args = request.args
     image_height = int(args.get('image_height'))
@@ -69,6 +72,7 @@ def load_bar_image():
     sections_num = int(args.get('sections_num'))
     
     colors = extract_colors.sections(image_filename, sections_num, image_height, bar_height, width)
+    
 
     return colors
 

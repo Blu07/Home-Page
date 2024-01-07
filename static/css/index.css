@@ -53,7 +53,6 @@ main #top-image button {
   height: min-content;
   border: 1px solid goldenrod;
   border-radius: 10px;
-  background-color: rgb(247, 233, 224);
 }
 main #top-image button img {
   -o-object-fit: contain;

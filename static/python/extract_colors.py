@@ -6,19 +6,18 @@ from pprint import pprint
 from collections import Counter
 
 
-
 def palette_KMeans(image, n_clt=10):
     clt = KMeans(n_clusters=n_clt, n_init=1)
     clt.fit(image.reshape(-1, 3))
-    
+
     labels = clt.cluster_centers_
     palette = clt.cluster_centers_.astype(int)
 
     return labels, palette
 
+
 def BGR2RGB(BGR: tuple):
     return (BGR[2], BGR[1], BGR[0])
-
 
 
 def get_color_sections(row_image, w, section_num, pixel_ratio=1):
@@ -31,30 +30,22 @@ def get_color_sections(row_image, w, section_num, pixel_ratio=1):
     section_width = int(np.floor(w * pixel_ratio / section_num))
     for i in range(section_num):
         section_image = row_image[:, section_width * i:section_width * (i + 1)]
-        
-        BGR = np.average(section_image, axis=(0,1))
+
+        BGR = np.average(section_image, axis=(0, 1))
         RGB = (int(BGR[2]), int(BGR[1]), int(BGR[0]))
-        
+
         most_common_colors.update({f"sec{i}": RGB})
-    
-    #print(most_common_colors)
-        
+
+    # print(most_common_colors)
+
     return most_common_colors
-
-
-def crop_to_bar():
-    pass
-
-
-
 
 
 def sections(filename, section_num,  target_h=None, bar_height=None, target_w=None):
     filepath = os.path.join('static', 'images', 'main_images', filename)
     image = cv2.imread(filepath)
     h, w, _ = image.shape
-    
-    
+
     # Crop to what is shown on the web page
     w_h_ratio = w / h
     w_h_target_ratio = target_w / target_h
@@ -64,7 +55,6 @@ def sections(filename, section_num,  target_h=None, bar_height=None, target_w=No
         # Original Image WIDER than the target
         pixel_ratio = h / target_h
         h_size, w_size = h, int(h * w_h_target_ratio)
-        
 
     elif w_h_ratio < w_h_target_ratio:
         # Original Image TALLER than the target
@@ -75,57 +65,60 @@ def sections(filename, section_num,  target_h=None, bar_height=None, target_w=No
         # Original Image WIDER than the target
         pixel_ratio = 1
         h_size, w_size = h, w
-    
+
     cropped_image = image[int(h/2 - h_size/2):int(h/2 + h_size/2),
-                           int(w/2 - w_size/2):int(w/2 + w_size/2)]
+                          int(w/2 - w_size/2):int(w/2 + w_size/2)]
     h, w = h_size, w_size
 
-
     # Row
-    bar_height = int(max(100, h) * pixel_ratio) if bar_height is None else int(bar_height * pixel_ratio)
+    bar_height = int(max(
+        100, h) * pixel_ratio) if bar_height is None else int(bar_height * pixel_ratio)
     row_image = cropped_image[h - bar_height:h, 0:w]
     row_image = cv2.flip(row_image, 0)
 
-    most_common_colors = get_color_sections(row_image, target_w, section_num, pixel_ratio)
-
+    most_common_colors = get_color_sections(
+        row_image, target_w, section_num, pixel_ratio)
 
     # cv2.imwrite("static/images/shown_image.jpg", cropped_image)
     cv2.imwrite("static/images/bar_image.jpg", row_image)
-    return most_common_colors
-    
 
+    return most_common_colors
 
 
 def main_color(filename):
     filepath = os.path.join("static", "images", "main_images", filename)
     image = cv2.imread(filepath)
     image.resize(501, 501)
-    
+
     k_cluster = KMeans(n_clusters=5, n_init=2)
     k_cluster.fit(image.reshape(-1, 3))
+    labels = k_cluster.labels_
+    centers = k_cluster.cluster_centers_.astype(int)
 
-    n_pixels = len(k_cluster.labels_)
-    counter = Counter(k_cluster.labels_) # count how many pixels per cluster
+    n_pixels = len(labels)
+    counter = Counter(labels)  # Count Pixels per Cluster
+
     perc = {}
-   
     for i in counter:
         perc[i] = np.round(counter[i]/n_pixels, 2)
-    perc = dict(sorted(perc.items(), key=lambda item: item[1], reverse=True))
+    #perc = dict(sorted(perc.items(), key=lambda item: item[1], reverse=True))
    
-    most_used_idx = max(perc, key=perc.get)
-    primary_color_BGR = k_cluster.cluster_centers_.astype(int)[most_used_idx]
+    most_used_clt = max(perc, key=perc.get)
+    primary_color_BGR = centers[most_used_clt]
+    print(primary_color_BGR)
 
     B, G, R = primary_color_BGR
-    
 
-    return f"rgb({R}, {G}, {B})"
+    clr_sch = {
+        "primary_color": f"rgb({R}, {G}, {B})",
+        #"secondary_color": secondary_color,
+        #"accent_color": accent_color,
+    }
+
+    return clr_sch
 
 
 if __name__ == '__main__':
-    
-    
-    
+
     colors = main_color("Night-Moon.jpg")
     print(colors)
-
-

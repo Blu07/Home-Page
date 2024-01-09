@@ -128,5 +128,5 @@ def color_scheme(filename):
 
 if __name__ == '__main__':
 
-    colors = main_color("Night-Moon.jpg")
+    colors = color_scheme("Night-Moon.jpg")
     print(colors)

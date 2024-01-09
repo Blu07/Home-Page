@@ -85,7 +85,7 @@ def sections(filename, section_num,  target_h=None, bar_height=None, target_w=No
     return most_common_colors
 
 
-def main_color(filename):
+def color_scheme(filename):
     filepath = os.path.join("static", "images", "main_images", filename)
     image = cv2.imread(filepath)
     image.resize(501, 501)
@@ -105,14 +105,15 @@ def main_color(filename):
    
     most_used_clt = max(perc, key=perc.get)
     primary_color_BGR = centers[most_used_clt]
-    print(primary_color_BGR)
-
     B, G, R = primary_color_BGR
 
+    primary_color = f"rgb({R}, {G}, {B})"
+    secondary_color = "None"
+    accent_color = "None"
     clr_sch = {
-        "primary_color": f"rgb({R}, {G}, {B})",
-        #"secondary_color": secondary_color,
-        #"accent_color": accent_color,
+        "primary_color": primary_color,
+        "secondary_color": secondary_color,
+        "accent_color": accent_color,
     }
 
     return clr_sch

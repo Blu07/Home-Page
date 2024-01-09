@@ -98,22 +98,30 @@ def main_color(filename):
     n_pixels = len(labels)
     counter = Counter(labels)  # Count Pixels per Cluster
 
+    # Sort the cluster numbers by percent
     perc = {}
     for i in counter:
         perc[i] = np.round(counter[i]/n_pixels, 2)
-    #perc = dict(sorted(perc.items(), key=lambda item: item[1], reverse=True))
-   
-    most_used_clt = max(perc, key=perc.get)
-    primary_color_BGR = centers[most_used_clt]
-    print(primary_color_BGR)
+    perc = dict(sorted(perc.items(), key=lambda item: item[1], reverse=True))
 
-    B, G, R = primary_color_BGR
+    color_names = ["primary_color", "secondary_color", "accent_color"]
+    
+    # Create the color scheme
+    clr_sch = {}
+    for i, color_name in enumerate(color_names):
+        cluster = centers[list(perc.items())[i][0]]
+        B, G, R = cluster
+        color_code = f"rgb({R}, {G}, {B})"
+        
+        clr_sch.update({color_name: color_code})
 
-    clr_sch = {
-        "primary_color": f"rgb({R}, {G}, {B})",
-        #"secondary_color": secondary_color,
-        #"accent_color": accent_color,
-    }
+    
+    # for v in primary_color_BGR:
+    #     if v < 200:
+    #         continue
+
+    #     mode = "light"
+
 
     return clr_sch
 

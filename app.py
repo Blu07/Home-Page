@@ -14,6 +14,7 @@ app.secret_key = secret_key
 def index():
     main_image_filename = main_image()
     clr_schm = color_scheme(main_image_filename)
+    
     primary_color = clr_schm["primary_color"]
     main_image_url = url_for('static', filename=f'images/main_images/{main_image_filename}')
 
@@ -39,7 +40,7 @@ def about_me():
 def color_scheme(filename):
     if not filename:
         filename = request.args.get("current")
-    clr_schm = extract_colors.main_color(filename)
+    clr_schm = extract_colors.color_scheme(filename)
     return clr_schm
 
 
@@ -48,18 +49,14 @@ def main_image():
     args = request.args
     excluded_img = args.get('current')
     
-    
     for _, _, filenames in os.walk(f'static/images/main_images'):
-        
         if not excluded_img:
             return random.choice(filenames)
         
         filenames.remove(excluded_img)
         new_image_filename = random.choice(filenames)
 
-        clr_sch = extract_colors.main_color(new_image_filename)
-
-        return {'new_image_filename': new_image_filename, 'color_scheme': clr_sch}
+        return {'new_image_filename': new_image_filename}
 
 
 @app.route('/load_bar_image')

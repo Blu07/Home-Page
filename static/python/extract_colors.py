@@ -85,7 +85,7 @@ def sections(filename, section_num,  target_h=None, bar_height=None, target_w=No
     return most_common_colors
 
 
-def main_color(filename):
+def color_scheme(filename):
     filepath = os.path.join("static", "images", "main_images", filename)
     image = cv2.imread(filepath)
     image.resize(501, 501)

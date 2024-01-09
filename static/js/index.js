@@ -13,6 +13,50 @@ function getColorMode() {
   }
 }
 
+function applyColorsToElements(main_array, colors, styles) {
+  main_array.forEach((category, style_index) => {
+    category.forEach((arr, arr_index) => {
+      [...arr].forEach((element) => {
+        // console.log(element, styles[style_index], colors, arr_index)
+        element.style[styles[style_index]] = colors[arr_index];
+      });
+    });
+  });
+}
+
+async function fetchNewImage(filename) {
+  let fetch_url = `/main_image?current=${filename}`;
+  try {
+    const response = await fetch(fetch_url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.new_image_filename;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+async function fetchColorScheme(filename) {
+  try {
+    let fetch_url = `/color_scheme/${filename}`;
+    let response = await fetch(fetch_url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    let data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching color scheme:", error);
+    return null; // or throw the error depending on your error handling strategy
+  }
+}
+
 async function changeTopBar(filename) {
   let top_image_element = document.getElementById("main-image");
   let top_bar_element = document.getElementById("top-bar");
@@ -69,44 +113,56 @@ async function changeTopBar(filename) {
 }
 
 async function changeColorScheme(arg, isColorScheme) {
-  let main_element = document.getElementById("main");
-  let image_btn = document.getElementById("image-btn");
-  let top_image_element = document.getElementById("main-image");
+  let bg_primary = document.getElementsByClassName("bg-primary");
+  let bg_secondary = document.getElementsByClassName("bg-secondary");
+  let bg_accent = document.getElementsByClassName("bg-accent");
+
+  let text_primary = document.getElementsByClassName("text-primary");
+  let text_secondary = document.getElementsByClassName("text-secondary");
+  let text_accent = document.getElementsByClassName("text-accent");
+
+  let detail_primary = document.getElementsByClassName("detail-primary");
+  let detail_secondary = document.getElementsByClassName("detail-secondary");
+  let detail_accent = document.getElementsByClassName("detail-accent");
+
+  let backgrounds = [bg_primary, bg_secondary, bg_accent];
+  let texts = [text_primary, text_secondary, text_accent];
+  let details = [detail_primary, detail_secondary, detail_accent];
 
   var primary_color;
   var secondary_color;
   var accent_color;
 
+  // There is no input, get filename of current displayed image
   if (arg === undefined) {
-    var imageUrl = top_image_element.src;
-    var url = new URL(imageUrl);
+    let top_image_element = document.getElementById("main-image");
+    let imageUrl = top_image_element.src;
+    let url = new URL(imageUrl);
     var filename = url.pathname.split("/").pop();
-  } else if (isColorScheme) {
+  }
+  // There is input, do this if input is a Color Scheme
+  else if (isColorScheme) {
     primary_color = arg.primary_color;
     secondary_color = arg.secondary_color;
     accent_color = arg.accent_color;
   }
 
-  if (isColorScheme === false || isColorScheme === undefined) {
-    let fetch_url = `/color_scheme/${filename}`;
-
-    try {
-      let response = await fetch(fetch_url);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      let data = await response.json();
-
-      primary_color = data.primary_color;
-    } catch (error) {
-      console.error("Error fetching color scheme:", error);
-    }
+  // There is input, but it is not a Color Scheme
+  if (!isColorScheme || isColorScheme === undefined) {
+    let color_scheme = await fetchColorScheme(filename);
+    primary_color = color_scheme.primary_color;
+    secondary_color = color_scheme.secondary_color;
+    accent_color = color_scheme.accent_color;
   }
-  image_btn.style.backgroundColor = primary_color;
-  main_element.style.backgroundColor = primary_color;
+
+  let styles_properties = ["backgroundColor", "color", "borderColor"];
+  let all_elements = [backgrounds, texts, details];
+  let colors = [primary_color, secondary_color, accent_color];
+
+  // Change the colors of all elements to their respectives
+  applyColorsToElements(all_elements, colors, styles_properties);
 }
+
 
 async function changeMainImage() {
   let top_image_element = document.getElementById("main-image");
@@ -115,25 +171,11 @@ async function changeMainImage() {
   let url = new URL(imageUrl);
   let filename = url.pathname.split("/").pop();
 
-  let fetch_url = `/main_image?current=${filename}`;
-  try {
-    const response = await fetch(fetch_url);
+  let new_filename = await fetchNewImage(filename);
+  top_image_element.src = `static/images/main_images/${new_filename}`;
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    var new_image_filename = data.new_image_filename;
-    var color_scheme = data.color_scheme;
-    top_image_element.src = `static/images/main_images/${new_image_filename}`;
-
-    changeTopBar(new_image_filename);
-    changeColorScheme(color_scheme, true);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+  changeTopBar(new_filename);
+  changeColorScheme();
 }
 
 function updateActiveLink() {

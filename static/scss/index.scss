@@ -29,16 +29,17 @@ body {
 }
 
 
-.image-behind-scrollbar::before {
+.scrollbar-shade {
     content: "";
     display: block;
     position: absolute;
     top: 0px;
-    left: 0px;
-    width: 100%;
+    right: $scroll-bar-width;
+    width: 5px;
     height: 100%;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent calc(99.8% - $scroll-bar-width), $primary-light-color calc(100% - $scroll-bar-width));
+    background: linear-gradient(90deg, transparent 40%, $primary-light-color 100%);
+    z-index: 2;
 }
 
 
@@ -166,6 +167,7 @@ main {
 ::-webkit-scrollbar {
     width: $scroll-bar-width; // Width of the vertical scrollbar
     height: $scroll-bar-height; // Height of the horizontal scrollbar
+    z-index: 3;
 }
 
 ::-webkit-scrollbar-thumb {

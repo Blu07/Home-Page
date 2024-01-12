@@ -16,10 +16,6 @@ def palette_KMeans(image, n_clt=10):
     return labels, palette
 
 
-def BGR2RGB(BGR: tuple):
-    return (BGR[2], BGR[1], BGR[0])
-
-
 def get_color_sections(row_image, w, section_num, pixel_ratio=1):
     """
     Get the most common color from each vertical section the image.
@@ -128,5 +124,5 @@ def color_scheme(filename):
 
 if __name__ == '__main__':
 
-    colors = color_scheme("Night-Moon.jpg")
+    colors = color_scheme("Forest.jpg")
     print(colors)

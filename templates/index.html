@@ -4,22 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../static/css/index.css">
-    <title>Hjemmeside</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    
+    {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+        <title>Hjemmeside</title>
 
-    <style>
-        #top-bar,
-        main,
-        #image-btn {
-            background-color: {{ primary_color }};
-        }
+        <style>
+            #top-bar,
+            #image-btn {
+                background-color: {{ primary_color }};
+            }
         </style>
+
+    {% endblock %}
 
 </head>
 <body>
     
-    <main id="main" class="bg-primary">
+    <main id="main">
         {% block main %}
         <div id="top-image">
             <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
@@ -29,6 +32,7 @@
             </button>
         </div>
         <div id="top-bar" style="background-size: 100% 100%">
+            <div id="top-bar-shade"></div>
             <a href="#portfolio"> PORTFOLIO </a>
             <a href="#about-me"> ABOUT ME </a>
             <a href="#feedback"> FEEDBACK </a>
@@ -52,11 +56,14 @@
             
         </section>
         
+        <div id="scrollbar-shade"></div>
         
         
         {% endblock %}
-        <div class="scrollbar-shade"></div>
     </main>
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    {% block scripts %}
+        <!-- Local Scripts  -->
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    {% endblock %}
 </body>
 </html>

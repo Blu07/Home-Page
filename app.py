@@ -10,6 +10,9 @@ app = Flask(__name__)
 app.secret_key = secret_key
 
 
+projects = ["aboutme", "analysis", "feedback", "portfolio"]
+
+
 @app.route('/')
 def index():
     main_image_filename = main_image()
@@ -21,19 +24,13 @@ def index():
     return render_template('index.html', main_image_url=main_image_url, primary_color=primary_color)
 
 
-@app.route('/feedback')
-def feedback():
-    return render_template('feedback.html')
+@app.route('/<path:project_name>')
+def feedback(project_name):
+    if not project_name in projects:
+        return None
 
+    return render_template(f'{project_name}.html')
 
-@app.route('/portfolio')
-def portfolio():
-    return render_template("/portfolio.html")
-
-
-@app.route('/aboutme')
-def about_me():
-    return render_template("/aboutme.html")
 
 
 @app.route("/color_scheme/<string:filename>")

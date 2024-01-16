@@ -233,11 +233,17 @@ function init() {
   // Sections of document coloured at top-bar buttons.
   addClickListener();
   addScrollListener();
-  updateActiveLink(); // Call the function initially to set the initial active link
+  updateActiveLink();
 
   // Top-bar colour gradient
   changeTopBar();
   addResizeListener();
+
+  changeColorScheme();
+
 }
+
+
+
 
 window.onload = init();

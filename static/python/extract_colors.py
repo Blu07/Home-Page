@@ -87,11 +87,12 @@ def sections(filename, section_num,  target_h=None, bar_height=None, target_w=No
 
 def color_scheme(filename):
     filepath = os.path.join("static", "images", "main_images", filename)
-    image = cv2.imread(filepath)
-    image.resize(501, 501)
+    orig_image = cv2.imread(filepath)
+    orig_image.resize(501, 501)
 
-    k_cluster = KMeans(n_clusters=5, n_init=2)
-    k_cluster.fit(image.reshape(-1, 3))
+    n_clusters = 5
+    k_cluster = KMeans(n_clusters=n_clusters, n_init=2)
+    k_cluster.fit(orig_image.reshape(-1, 3))
     labels = k_cluster.labels_
     centers = k_cluster.cluster_centers_.astype(int)
 
@@ -106,22 +107,30 @@ def color_scheme(filename):
 
     color_names = ["primary_color", "secondary_color", "accent_color"]
     
+    # radius = 10
+    # gray = cv2.cvtColor(orig_image, cv2.COLOR_BGR2GRAY)
+    # gray = cv2.GaussianBlur(orig_image, (radius, radius), 0)
+    # (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(gray)
+    # print(minVal, minLoc, maxVal, maxLoc)
+    # brightness = []
+    # brightness = sorted(brightness, reverse=True)
+    # print(brightness)
+
     # Create the color scheme
     clr_sch = {}
-    for i, color_name in enumerate(color_names):
+    for i, color_name in enumerate(color_names[:-1]):
         cluster = centers[list(perc.items())[i][0]]
         B, G, R = cluster
         color_code = f"rgb({R}, {G}, {B})"
         
         clr_sch.update({color_name: color_code})
 
-    
+    # clr*_sch.update({color_names[-1]: brightness[0][1]})
     # for v in primary_color_BGR:
     #     if v < 200:
     #         continue
 
     #     mode = "light"
-
 
     return clr_sch
 

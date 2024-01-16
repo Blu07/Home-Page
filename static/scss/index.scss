@@ -1,5 +1,4 @@
 
-
 $primary-light-color: rgb(247, 233, 224);
 $secondary-light-color: rgb(51, 42, 42);
 $accent-light-color: goldenrod;
@@ -8,7 +7,7 @@ $primary-dark-color: rgb(32, 31, 28);
 $secondary-dark-color: gray;
 $accent-dark-color: firebrick;
 
-
+$shade-thickness: 4px;
 
 $top-bar-height: 50px;
 $image-height: calc(100svh - $top-bar-height);
@@ -19,28 +18,14 @@ $scroll-bar-height: 15px;
 
 
 body {
-    background-image: none;
     background-color: $primary-light-color;
-    margin: 0px;
     color: $secondary-light-color;
-
+    
+    margin: 0px;
     height: 100svh;
 
 }
 
-
-.scrollbar-shade {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0px;
-    right: $scroll-bar-width;
-    width: 5px;
-    height: 100%;
-    pointer-events: none;
-    background: linear-gradient(90deg, transparent 40%, $primary-light-color 100%);
-    z-index: 2;
-}
 
 
 
@@ -106,8 +91,6 @@ main {
     }
 
     
-    
-
     #top-bar {
         display: flex;
         flex-flow: row wrap;
@@ -121,7 +104,8 @@ main {
         top: 0px;
 
         width: 100svw;
-        height: $top-bar-height;
+        height: $top-bar-height + $shade-thickness;
+        padding-bottom: $shade-thickness;
 
  
         a {
@@ -157,6 +141,34 @@ main {
     }    
 
 
+    #scrollbar-shade {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0px;
+        right: $scroll-bar-width;
+        width: $shade-thickness;
+        height: 100%;
+        pointer-events: none;
+        background: linear-gradient(90deg, transparent, $primary-light-color 100%);
+        z-index: 2;
+    }
+
+    #top-bar-shade {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 100svw;
+        height: $shade-thickness;
+        pointer-events: none;
+        background: linear-gradient(transparent, $primary-light-color 100%);
+        z-index: 2;
+    }
+
+
+    
 }
 
 

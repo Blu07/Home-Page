@@ -1,10 +1,17 @@
 {% extends 'index.html' %}
 
 
-{% block header %}
-
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio.css') }}">
 {% endblock %}
 
+
 {% block main %}
-hei
+    <h1>Portfolio</h1>
+    <a href="analysis">Analyse Naturfag</a>
+{% endblock %}
+
+
+{% block scripts %}
+
 {% endblock %}

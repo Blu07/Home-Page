@@ -2,3 +2,23 @@
 
 
 
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column wrap;
+
+    width: 100svw;
+    height: 100svh;
+
+}
+
+
+
+.page {
+    // display: none;
+    
+    width: 50%;
+    height: 50%;
+}
+

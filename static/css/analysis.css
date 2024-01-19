@@ -61,7 +61,8 @@ main #top-bar {
   position: sticky;
   top: 0px;
   width: 100svw;
-  height: 50px;
+  height: 54px;
+  padding-bottom: 4px;
 }
 main #top-bar a {
   padding: 7px 14px;
@@ -92,10 +93,22 @@ main #scrollbar-shade {
   position: absolute;
   top: 0px;
   right: 15px;
-  width: 5px;
+  width: 4px;
   height: 100%;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent 40%, rgb(247, 233, 224) 100%);
+  background: linear-gradient(90deg, transparent, rgb(247, 233, 224) 100%);
+  z-index: 2;
+}
+main #top-bar-shade {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100svw;
+  height: 4px;
+  pointer-events: none;
+  background: linear-gradient(transparent, rgb(247, 233, 224) 100%);
   z-index: 2;
 }
 
@@ -113,4 +126,18 @@ main #scrollbar-shade {
 
 ::-webkit-scrollbar-track {
   background-color: rgb(247, 233, 224);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column wrap;
+  width: 100svw;
+  height: 100svh;
+}
+
+.page {
+  width: 50%;
+  height: 50%;
 }

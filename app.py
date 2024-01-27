@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, jsonify
+import json
 import secrets
 import os
 import random
@@ -69,6 +70,14 @@ def load_bar_image():
     
 
     return colors
+
+
+@app.route('/analysisJSON')
+def anaylsisCSV():
+    
+    with open('uploads/analysisNotion.json') as file:
+        return jsonify(json.load(file))
+
 
 
 if __name__ == '__main__':

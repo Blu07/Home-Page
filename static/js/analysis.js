@@ -1,8 +1,9 @@
 const { Client } = require("@notionhq/client");
 const fs = require("fs");
+require("dotenv").config();
 
 const notion = new Client({
-  auth: "secret_a9knNx1Iu6AccJ2JVzoyaNa5EVpGfvKS50ztd2mZr0D",
+  auth: process.env.NOTION_API_KEY,
 });
 
 async function queryDatabase() {

@@ -30,21 +30,25 @@
                 <img id="image-btn-img" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
                 <p id="image-btn-p">Change Image</p>
             </button>
+            <div class="colors">
+
+                <div class="bg-primary">Primary Color</div>
+                <div class="bg-secondary">Secondary Color</div>
+                <div class="bg-accent">Accent Color</div>
+            </div>
         </div>
         <div id="top-bar" style="background-size: 100% 100%">
             <div id="top-bar-shade"></div>
             <a href="#portfolio"> PORTFOLIO </a>
             <a href="#about-me"> ABOUT ME </a>
             <a href="#feedback"> FEEDBACK </a>
+            <a href="#shop"> SHOP </a>
         </div>
         
         <a href="/portfolio">My Portfolio Page</a>
         
         <section id="portfolio">
-            <h1 class="bg-primary">Primary Color</h1>
-            <h1 class="bg-secondary">Secondary Color</h1>
-            <h1 class="bg-accent">Accent Color</h1>
-            
+            Portfolio
         </section>
         
         <section id="about-me">
@@ -54,6 +58,12 @@
         
         <section id="feedback">
             This is the Feedback preview.
+            
+        </section>
+
+        <section id="shop">
+            This is the Shop preview.
+            <a href="/shop"> Go to Shop </a>
             
         </section>
         

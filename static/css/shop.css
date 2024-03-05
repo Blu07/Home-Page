@@ -1,0 +1,17 @@
+@import 'index.css';
+main {
+  margin: 40px 50px;
+}
+
+#product_list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 5px;
+}
+#product_list .product {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  height: auto;
+  width: 180px;
+}

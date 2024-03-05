@@ -87,6 +87,35 @@ main {
 
         }
       
+        .colors {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+            box-sizing: border-box;
+            
+            position: relative;
+            bottom: 200px;
+    
+            width: fit-content;
+            height: 100px;
+            
+
+            background-color: $primary-light-color;
+            box-sizing: border-box;
+            
+            div {
+                width: 70px;
+                height: 100%;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+        }
+
+    
 
     }
 
@@ -140,6 +169,9 @@ main {
 
     }    
 
+    section {
+        height: 400px;
+    }
 
     #scrollbar-shade {
         content: "";

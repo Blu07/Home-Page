@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = secret_key
 
 
-projects = ["aboutme", "analysis", "feedback", "portfolio"]
+projects = ["aboutme", "analysis", "feedback", "portfolio", "shop"]
 
 
 @app.route('/')
@@ -18,7 +18,7 @@ def index():
     main_image_filename = main_image()
     clr_schm = color_scheme(main_image_filename)
     
-    primary_color = clr_schm["primary_color"]
+    primary_color = clr_schm[0]
     main_image_url = url_for('static', filename=f'images/main_images/{main_image_filename}')
 
     return render_template('index.html', main_image_url=main_image_url, primary_color=primary_color)
@@ -34,10 +34,11 @@ def feedback(project_name):
 
 
 @app.route("/color_scheme/<string:filename>")
-def color_scheme(filename):
+def color_scheme(filename, mode="light"):
     if not filename:
         filename = request.args.get("current")
-    clr_schm = extract_colors.color_scheme(filename)
+    mode = request.args.get("color_mode")
+    clr_schm = extract_colors.color_scheme(filename, mode)
     return clr_schm
 
 

@@ -1,22 +1,8 @@
 body {
-  background-image: none;
   background-color: rgb(247, 233, 224);
-  margin: 0px;
   color: rgb(51, 42, 42);
+  margin: 0px;
   height: 100svh;
-}
-
-.scrollbar-shade {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0px;
-  right: 15px;
-  width: 5px;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent 40%, rgb(247, 233, 224) 100%);
-  z-index: 2;
 }
 
 main {
@@ -64,6 +50,27 @@ main #top-image button img {
 main #top-image button p {
   font-size: xx-small;
 }
+main #top-image .colors {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  bottom: 200px;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 100px;
+  background-color: rgb(247, 233, 224);
+  box-sizing: border-box;
+}
+main #top-image .colors div {
+  width: 70px;
+  height: 100%;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 main #top-bar {
   display: flex;
   flex-flow: row wrap;
@@ -75,7 +82,8 @@ main #top-bar {
   position: sticky;
   top: 0px;
   width: 100svw;
-  height: 50px;
+  height: 54px;
+  padding-bottom: 4px;
 }
 main #top-bar a {
   padding: 7px 14px;
@@ -99,6 +107,33 @@ main #top-bar a.active {
   color: rgb(51, 42, 42);
   background-color: rgb(247, 233, 224);
   border-color: goldenrod;
+}
+main section {
+  height: 400px;
+}
+main #scrollbar-shade {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  width: 4px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgb(247, 233, 224) 100%);
+  z-index: 2;
+}
+main #top-bar-shade {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100svw;
+  height: 4px;
+  pointer-events: none;
+  background: linear-gradient(transparent, rgb(247, 233, 224) 100%);
+  z-index: 2;
 }
 
 ::-webkit-scrollbar {

@@ -161,3 +161,6 @@ cython_debug/
 
 # bar_image.jpg changes on load anyway
 bar_image.jpg
+
+# Node.js
+node_modules/

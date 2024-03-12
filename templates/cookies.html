@@ -1,0 +1,139 @@
+{% extends 'index.html' %}
+
+{% block head %}
+<link
+  rel="stylesheet"
+  href=" {{ url_for('static', filename='css/cookies.css') }} "
+/>
+{% endblock %}
+
+
+{% block main %}
+
+  <h1>How do Cookies affect the individual and the community?</h1>
+
+  <section>
+    <img id="cookie" src=" {{ url_for('static', filename='images/cookie.png') }} " alt="Three cookies." width="200px" height="200px">
+    <!-- https://pngimg.com/image/13656 -->
+    <h2>Crumbly cookies; a chip description.</h2>
+    <p>
+      Cookies are <i>files</i> downloaded to a user's computer which stores tracking
+      information about their usage on the website.
+    </p>
+
+
+  </section>
+
+  <section>
+    <h2>What regulations are in place around cookies?</h2>
+
+    <p>
+      Regulations regarding cookies are often put in place by countries, while the
+      largest regulation is the GDPR, General Data Protection Regulation, a
+      regulation by the EU. These regulations only apply to use of cookies in
+      countries within the EU, but many companies follow them even outside these
+      countries.
+    </p>
+    <section class="left-right">
+
+      <ul>
+        <p>The regulations in the GDPR specify that websites must:</p>
+        <li>Receive consent from the user before downloading cookies.</li>
+        <li>Give clear information about the cookies.</li>
+        <li>Download only the minimum of what the cookies specify.</li>
+        <li>Allow users do access and delete cookie information.</li>
+        <li>
+          Not have Cookie Walls, which are restrictions to the website due to the
+          user refusing to accept cookies.
+        </li>
+      </ul>
+      <section>
+
+        <p>
+          Other countries and regulations include the US, where there are only laws
+          that restrict the use of cookies and are only state-to-state. Canada has the
+          Personal Information Protection and Electronic Documents Act, PIPEDA, and
+          after Brexit, the UK introduced its own regulations like the GDPR. Australia
+          has the Privacy Act, which are not as strict as the GDPR.
+        </p>
+        <p>
+          A well-known allegation against Meta, formerly Facebook, is that they track
+          users outside of their platforms, like listening to the microphone for what
+          you want, and sell this to advertisers on their platforms.
+        </p>
+      </section>
+    </section>
+  </section>
+
+
+  <section class="left-right">
+    <section>
+      <h2>How are cookies leveraged by companies, and sold to advertisers?</h2>
+
+      <p>
+        Companies track user data for multiple reasons, such as improving their
+        services and advertising. Every time users enter a new website, they must be
+        prompted with an “Accept cookies” pop-up, which also must inform the user of
+        the usage of their cookies.
+      </p>
+
+      <p>
+        Websites can track the usage patterns on their sites and try to improve
+        their services based on these patterns. An example might be that users
+        always enter the search bar to find their profile, so maybe they should make
+        the profile button easier to see.
+      </p>
+
+      <p>
+        Advertisers are also interested in showing their products to the right
+        audience, and target group. A way to receive these target groups is by
+        buying tracking patterns from companies and websites that track such, like
+        cookies. Companies are also happy to sell their information for profit.
+      </p>
+
+      <p>
+        Many regulations allow selling cookies to advertisers if they clearly inform
+        their users at the “accept cookies” pop-up. In the case someone does not
+        want their data sold, they must reject those cookies, but many people forget
+        this. This is why it is important for everyone to read these pop-ups.
+      </p>
+
+      <img id="cookies" src=" {{ url_for('static', filename='images/cookies.png') }} " alt="Three cookies." width="50%" height="200px">
+      <!-- https://pngimg.com/image/13656 -->
+
+    </section>
+
+    <section>
+      <h2>AI x Cookies</h2>
+      <p>
+        Selling cookies to advertisers increase their profit, and there might be a
+        new player to this business, Artificial Intelligence, or AI. Computing and
+        finding patterns in usage data and connecting that to what people want to
+        buy is easy to estimate approximately, but very difficult to do perfectly.
+        This is where AI comes in. AI can scan and look at data in a new way that no
+        other computer algorithm could have done before, and with LLMs, or Large
+        Language Models, they can be exponentially fine-tuned by looking at
+        sales-improvements.
+      </p>
+      <p>
+        The positive side of this is in the perspective of the business. With
+        AI-powered advertising, you could increase sales by finding the right target
+        group and make personalized advertisements.
+      </p>
+      <p>
+        The downside of this is in the perspective of the individual. Personalized
+        advertisements raise ethical questions related to privacy regulations.
+      </p>
+      <div width="100%" height="400px" style="border: 2px black;">
+        <img id="AIx" src=" {{ url_for('static', filename='images/AI_cookies.png') }} " alt="Robots powered by AI doing cookie analysis." width="100%" height="100%">
+        <!-- https://www.silverpush.co/blogs/will-ai-advertising-replace-third-party-cookies/ -->
+      </div>
+
+    </section>
+  </section>
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}

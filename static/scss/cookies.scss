@@ -1,0 +1,44 @@
+@import "index";
+
+main {
+  padding: 0px;
+  box-sizing: border-box;
+  
+  #cookie {
+    width: auto;
+    
+    display: block; /* Makes the image a block-level element */
+    margin: 0 auto; /* Centers the image horizontally */
+  }
+
+
+  #AIx,
+  #cookies {
+    width: 100%;
+    height: auto;
+  }
+
+  .left-right {
+    display: block;
+    
+    ul {
+      box-sizing: border-box;
+      width: 100%,
+    }
+  }
+
+  @media only screen and (min-width: 600px) {
+
+   
+    .left-right {
+      display: flex;
+      flex-flow: row nowrap;
+
+      > * {
+          flex: 1;
+      }
+    }
+  }
+
+
+}

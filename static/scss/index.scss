@@ -27,6 +27,12 @@ body {
     margin: 0px;
     height: 100svh;
 
+    padding-bottom: 10px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
 }
 
 
@@ -44,10 +50,14 @@ main {
     overflow-y: auto;
     overflow-x: hidden;
     overflow-anchor: auto;
+
+
         
     #top-image {
         display: block;
         position: relative;
+
+
 
         background: linear-gradient(transparent, black);
         
@@ -177,13 +187,6 @@ main {
 
     }    
 
-    section {
-        height: 400px;
-        width: 100svw;
-        padding-left: 10px;
-    }
-
-
 
     .shade {
         content: "";
@@ -215,9 +218,13 @@ main {
 
     
     section {
-
+      
+        height: 400px;
+        width: 100svw;
+        width: calc(100svw - $scroll-bar-width - 25px);
+        
         &#portfolio {
-            width: calc(100svw - $scroll-bar-width - 25px);;
+          padding-left: 0px;
             #portfolio-list {
                 
                 display: flex;

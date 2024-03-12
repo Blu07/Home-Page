@@ -27,26 +27,37 @@
     
     <main id="main">
         {% block main %}
-        <div id="top-image">
-            <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
-            <button id="change-image-btn" class="bg-primary" onclick="changeMainImage()">
-                <img id="change-image-btn-icon" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
-                <p id="image-btn-p">Change Image</p>
-            </button>
-
-            <div class="colors">
-                <div class="bg-primary">Primary Color</div>
-                <div class="bg-secondary">Secondary Color</div>
-                <div class="bg-accent">Accent Color</div>
+            {% block main_image %}
+            
+            <div id="top-image">
+                <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
+                
+                <button id="change-image-btn" class="bg-primary" onclick="changeMainImage()">
+                    <img id="change-image-btn-icon" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
+                    <p id="image-btn-p">Change Image</p>
+                </button>
+    <!--             
+                <div class="colors">
+                    <div class="bg-primary">Primary Color</div>
+                    <div class="bg-secondary">Secondary Color</div>
+                    <div class="bg-accent">Accent Color</div>
+                </div> -->
+                
             </div>
+            {% endblock %}
+        
 
-        </div>
-        <div id="top-bar" style="background-size: 100% 100%">
-            <div id="top-bar-shade" class="shade"></div>
-            <a href="#portfolio"> PORTFOLIO </a>
-            <a href="#about-me"> ABOUT ME </a>
-            <a href="#contact"> CONTACT </a>
-        </div>
+            <!-- Top Bar -->
+            {% block top_bar %}            
+            <div id="top-bar" style="background-size: 100% 100%">
+                <div id="top-bar-shade" class="shade"></div>
+                <a href="#portfolio"> PORTFOLIO </a>
+                <a href="#about-me"> ABOUT ME </a>
+                <a href="#contact"> CONTACT </a>
+            </div>
+            {% endblock %}
+
+        
         
         <section id="portfolio">
             <h1>Portfolio</h1>

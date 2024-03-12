@@ -11,7 +11,14 @@ app = Flask(__name__)
 app.secret_key = secret_key
 
 
-projects = ["aboutme", "analysis", "feedback", "portfolio", "shop"]
+projects = [
+    "aboutme",
+    "analysis",
+    "feedback",
+    "portfolio",
+    "shop",
+    "cookies",
+    ]
 
 
 @app.route('/')

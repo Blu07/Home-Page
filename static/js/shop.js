@@ -31,6 +31,7 @@ const prod_reg = [
     },
 ];
 
+// Finn handlelista i localStorage
 if (localStorage.getItem("cart")) {
     var cart = JSON.parse(localStorage.getItem("cart"))
 }
@@ -38,7 +39,7 @@ else {
     cart = {}
 }
 
-
+// Vis produktene og handlelista
 show_product_list()
 show_cart()
 
@@ -134,7 +135,7 @@ function show_cart() {
     Object.keys(cart).forEach(prod_id => {
         const item = cart[prod_id];
         let itemEl = document.createElement('div');
-        itemEl.textContent = `${item.prod_name}: ${item.count}`;
+        itemEl.innerHTML = `${item.count} stk. <b>${item.prod_name}</b>`;// <b>${item.price}kr.</b>`;
         cart_view_el.appendChild(itemEl);
     });
 }

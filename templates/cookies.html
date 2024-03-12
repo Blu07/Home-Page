@@ -8,19 +8,28 @@
 {% endblock %}
 
 
+
+
 {% block main %}
+  {% block top_bar %}
+    <a href="#">Hi</a>
+  {% endblock %}
 
   <h1>How do Cookies affect the individual and the community?</h1>
 
-  <section>
-    <img id="cookie" src=" {{ url_for('static', filename='images/cookie.png') }} " alt="Three cookies." width="200px" height="200px">
-    <!-- https://pngimg.com/image/13656 -->
-    <h2>Crumbly cookies; a chip description.</h2>
-    <p>
-      Cookies are <i>files</i> downloaded to a user's computer which stores tracking
-      information about their usage on the website.
-    </p>
-
+  <section class="left-right">
+    <div>
+      <h2>Crumbly cookies; a chip description.</h2>
+      <p>
+        Cookies are <i>files</i> downloaded to a user's computer which stores tracking
+        information about their usage on the website.
+      </p>
+    </div>
+    
+    <div>
+      <img id="cookie" src=" {{ url_for('static', filename='images/cookie.png') }} " alt="Three cookies." width="200px" height="200px">
+      <!-- https://pngimg.com/image/13656 -->
+    </div>
 
   </section>
 

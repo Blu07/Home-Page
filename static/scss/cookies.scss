@@ -1,8 +1,22 @@
 @import "index";
 
 main {
-  padding: 0px;
+  padding: 8px 15px;
   box-sizing: border-box;
+
+  * {
+    line-height: 1.65;
+  }
+
+  #top-bar {
+    display: block;
+  }
+
+  section {
+    height: auto;
+    // margin-bottom: 20px;
+  }
+
   
   #cookie {
     width: auto;
@@ -20,6 +34,8 @@ main {
 
   .left-right {
     display: block;
+
+    gap: 15px;
     
     ul {
       box-sizing: border-box;

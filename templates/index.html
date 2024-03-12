@@ -26,8 +26,8 @@
         {% block main %}
         <div id="top-image">
             <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
-            <button id="image-btn" class="bg-primary" onclick="changeMainImage()">
-                <img id="image-btn-img" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
+            <button id="change-image-btn" class="bg-primary" onclick="changeMainImage()">
+                <img id="change-image-btn-icon" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
                 <p id="image-btn-p">Change Image</p>
             </button>
             <div class="colors">

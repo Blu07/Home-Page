@@ -157,7 +157,7 @@ def color_scheme(filename, color_mode="light"):
     for B, G, R in centers[:len(color_names)]:
         colors.append(Color(R, G, B))
 
-    clr_scheme = ColorScheme(*colors)
+    clr_sch = ColorScheme(*colors)
     
     # Create the color scheme
     
@@ -178,7 +178,7 @@ def color_scheme(filename, color_mode="light"):
     #         continue
 
     #     mode = "light"
-
+    # print(clr_sch)
     return clr_sch
 
 

@@ -7,13 +7,16 @@ $primary-dark-color: rgb(32, 31, 28);
 $secondary-dark-color: gray;
 $accent-dark-color: firebrick;
 
-$shade-thickness: 4px;
+$shade-thickness: 5px;
 
 $top-bar-height: 50px;
 $image-height: calc(100svh - $top-bar-height);
 
 $scroll-bar-width: 15px;
 $scroll-bar-height: 15px;
+
+$border-radius-small: 4px;
+$border-radius-large: 8px;
 
 
 
@@ -27,7 +30,9 @@ body {
 }
 
 
-
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 
 
 main {
@@ -39,7 +44,6 @@ main {
     overflow-y: auto;
     overflow-x: hidden;
     overflow-anchor: auto;
-
         
     #top-image {
         display: block;
@@ -71,7 +75,7 @@ main {
             height: min-content;
 
             border: 1px solid $accent-light-color;
-            border-radius: 10px;
+            border-radius: $border-radius-large;
             
 
             
@@ -88,7 +92,8 @@ main {
         }
       
         .colors {
-            display: flex;
+            display: none; // Hide for production
+            // display: flex;
             flex-flow: row wrap;
             justify-content: center;
             align-items: center;
@@ -109,7 +114,7 @@ main {
             div {
                 width: 70px;
                 height: 100%;
-                border-radius: 4px;
+                border-radius: $border-radius-small;
                 box-sizing: border-box;
             }
 
@@ -149,7 +154,7 @@ main {
             background-color: $secondary-light-color;
             border: 2px solid $accent-light-color;
             
-            border-radius: 8px;
+            border-radius: $border-radius-large;
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 
             &:hover {
@@ -171,35 +176,216 @@ main {
 
     section {
         height: 400px;
+        width: 100svw;
+        padding-left: 10px;
     }
 
-    #scrollbar-shade {
+
+
+    .shade {
         content: "";
         display: block;
         position: absolute;
+        
+        pointer-events: none;
+        z-index: 2;
+    }
+    #scrollbar-shade {
         top: 0px;
-        right: $scroll-bar-width;
+        right: $scroll-bar-width - 2px;
         width: $shade-thickness;
         height: 100%;
-        pointer-events: none;
+
         background: linear-gradient(90deg, transparent, $primary-light-color 100%);
-        z-index: 2;
+        
     }
 
     #top-bar-shade {
-        content: "";
-        display: block;
-        position: absolute;
-        bottom: 0px;
+        bottom: -1px;
         left: 0px;
         width: 100svw;
         height: $shade-thickness;
-        pointer-events: none;
+
         background: linear-gradient(transparent, $primary-light-color 100%);
-        z-index: 2;
+        
     }
 
+    
+    section {
 
+        &#portfolio {
+            width: calc(100svw - $scroll-bar-width - 25px);;
+            #portfolio-list {
+                
+                display: flex;
+                flex-flow: row nowrap;
+                
+                padding: 10px 20px;
+                column-gap: 8px;
+
+                overflow-x: scroll;
+                .card {
+                    width: 200px;
+                    min-width: 200px;
+                    height: 300px;
+                    max-height: inherit;
+                    
+                    padding: 4px;
+                    
+                    border: 2px solid $secondary-light-color;
+                    border-radius: $border-radius-large;
+                }
+                
+            }
+        }
+        
+        &#about-me {
+            background-color:rgb(246, 230, 211);
+            padding: 10px 20px;
+
+            p {
+                font-size: 18px;
+                line-height: 1.6;
+                
+            }
+        }
+
+        &#contact {
+            form {
+                
+                .flex {
+                  display: block;
+                  flex-flow: row wrap;
+                  
+                  > div {
+                    margin: 20px;
+                  }
+                }
+            
+                margin: 10px 10px;
+                padding: 10px 15px;
+                
+                border: 3px solid rgb(120, 120, 171);
+                border-radius: $border-radius-large;
+                
+                max-width: calc(100svw - $scroll-bar-width - 25px);
+                width: fit-content;
+                
+                box-sizing: border-box;
+                
+                
+                h3 {
+                  margin: 0px 0px 3px -4px;
+                }
+                
+                input {
+                //   background-color: $primary-background-color-darker;
+                //   border-color: $primary-background-color-lighter;
+                  border-radius: 4px;
+                  color: $primary-dark-color;
+                  margin: 4px 3px;
+                  padding: 4px 2px;
+                  font-size: medium;
+                }
+                
+                label {
+                  margin: 8px 3px;
+                }
+                
+                #cats {
+                  flex: 1;
+                }
+            
+                #personal-info {
+                  flex: 2;
+                }
+            
+                #food {
+                  flex: 1;
+                }
+            
+            
+                #order {
+                  flex: 2;
+                  
+                  padding: 4px 8px;
+                  
+                //   background-color: $primary-background-color-darker;
+                //   border: 3px solid $primary-background-color-lighter;
+                  border-radius: $border-radius-small;
+                }
+                
+                .required::after {
+                  content: " *";
+                  color: rgb(224, 3, 3);
+                }
+                
+                .centered-one-line {
+                  display: flex;
+                  flex-flow: row wrap;
+                  
+                  align-items: center;
+                  
+                  label {
+                    display: inline;
+                    flex: 0 0 auto;
+                    margin-right: 10px;  
+                  }
+            
+                  > div {
+                    display: block;
+                    height: 100%;
+                    flex: 1 1 auto;
+                  }
+            
+                }
+                
+                .force-next-to-be {
+                  display: block;
+                  width: fit-content;
+                }
+                
+                #submit {
+                  text-align: center;
+                  
+                  button {
+                    color: $primary-dark-color;
+                    // background-color: $primary-background-color-lighter;
+                    // border: 4px solid $primary-background-color-darker;
+                    border-radius: 8px;
+                    margin: 20px 0px;
+                    width: 80px;
+                    height: 35px;
+                  }
+                }
+            
+            
+                @media only screen and (min-width: 768px) {
+                    form {
+                        justify-self: center;
+
+                    }
+                    .flex {
+                    display: flex;
+                  }
+                }
+            
+              }
+
+            // Auto Fill
+            input:-webkit-autofill,
+            input:-webkit-autofill:hover,
+            input:-webkit-autofill:focus,
+            input:-webkit-autofill:active {
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: $secondary-light-color;
+            transition: background-color 5000s ease-in-out 0s; // transition here does nothing in recent Chrome browsers, it's only a fallback solution for older versions of Chrome.
+            box-shadow: inset 0 0 20px 20px adjust-color($color: $primary-light-color, $red: -10, $green: -10, $blue: -10);; //$primary-background-color-darker;
+            }
+
+        }
+
+    }
     
 }
 

@@ -101,7 +101,7 @@ async function changeColorScheme(filename, colorScheme) {
   const accent_color = colorScheme.accent_color;
 
   // Organize arrays into groups
-  const styles = ["backgroundColor", "color", "borderColor"];
+  const styles = ["light", "dark", "accent"];
   const DOM_elements = [backgrounds, texts, details];
   const colors = [primary_color, secondary_color, accent_color];
 

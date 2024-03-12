@@ -164,3 +164,6 @@ bar_image.jpg
 
 # Node.js
 node_modules/
+
+# CSS
+static/css/*.css

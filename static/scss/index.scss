@@ -61,7 +61,7 @@ main {
             
         }
         
-        button {
+        #change-image-btn {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -74,12 +74,14 @@ main {
             width: min-content;
             height: min-content;
 
-            border: 1px solid $accent-light-color;
+            border: 1.5px solid $accent-light-color;
             border-radius: $border-radius-large;
             
+            background-color: rgba($color: white, $alpha: 0.1);
+            backdrop-filter: blur(2px);
 
             
-            img {
+            #change-image-btn-icon {
                 object-fit: contain;
                 width: 90%;
                 height: 90%;
@@ -87,6 +89,7 @@ main {
 
             p {
                 font-size: xx-small;
+                font-weight: 800;
             }
 
         }

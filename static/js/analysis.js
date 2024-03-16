@@ -19,19 +19,29 @@ async function queryDatabase() {
   );
 
   const headers = Object.keys(results[2].properties);
-  let object = [headers];
+
+  let collection = [];
 
   results.forEach((page) => {
-    let props = [];
-    Object.values(page.properties).forEach((prop) => {
-      props.push(handleProperty(prop));
+    let document = {};
+    Object.entries(page.properties).forEach(([prop_name, value]) => {
+      document[prop_name] = handleProperty(value);
     });
-    object.push(props);
+    collection.push(document);
   });
 
-  object = JSON.stringify(object, null, 2)
+  collection.forEach((day) => {
+    // document ID is the date in format YYYY-MM-DD
+    const dateString = new Date(day.Dato).toISOString().split("T")[0];
+    console.log(dateString);
+  });
 
-  fs.writeFileSync("uploads/analysisNotion.json", object);
+  collection = JSON.stringify(collection, null, 2);
+  
+  
+
+
+  fs.writeFileSync("uploads/analysisNotion.json", collection);
 }
 
 function handleProperty(prop) {
@@ -85,8 +95,8 @@ function handleSelect(prop) {
     Deep: 3,
   };
 
-  // return prop.select.name;
-  return name_value[prop.select.name];
+  return prop.select.name;
+  // return name_value[prop.select.name];
 }
 
 function handleNumber(prop) {
@@ -109,9 +119,5 @@ function handleUnknown(prop) {
   console.log("Unknown type of property:", prop);
   return null; // You can adjust this based on your needs
 }
-
-
-
-
 
 queryDatabase();

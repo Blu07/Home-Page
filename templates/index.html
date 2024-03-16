@@ -36,7 +36,7 @@
                     <img id="change-image-btn-icon" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
                     <p id="image-btn-p">Change Image</p>
                 </button>
-    <!--             
+                <!--             
                 <div class="colors">
                     <div class="bg-primary">Primary Color</div>
                     <div class="bg-secondary">Secondary Color</div>
@@ -92,14 +92,21 @@
         </section>
         
         <section id="about-me">
-            <h1>About Me</h1>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione debitis, incidunt in odit praesentium quas eos accusantium magnam cupiditate architecto est aliquam rem iste, suscipit, ex dolorum necessitatibus eaque facilis.</p>
+            <div id="about-me-block" class="fall-768px">
+                <div id="about-me-text">
+                    <h1>About Me</h1>
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione debitis, incidunt in odit praesentium quas eos accusantium magnam cupiditate architecto est aliquam rem iste, suscipit, ex dolorum necessitatibus eaque facilis.</p>
+                </div>
+                <div id="about-me-img">
+                    <img src="#" alt="Meg">
+                </div>
+            </div>
         </section>
         
         <section id="contact">
             <h1>Hi, contact me here :&rpar;</h1>
-            <form onsubmit="return validateForm()" method="get">
-                <div class="flex">
+            <form onsubmit="return validateForm()" method="get" id="contact-form">
+                <div class="fall-768px">
                     <div id="cats">
                         <h3 class="required">Hvor mange katter vil du ha?</h3>
                         <input type="radio" name="Number of Cats" id="no_cat" value="0" required>

@@ -1,23 +1,21 @@
-google.charts.load("current", { packages: ["table"] });
-google.charts.setOnLoadCallback(plotData);
+google.charts.load("current", { packages: ["table", "bar"] });
 
 async function plotData() {
-  const container = document.querySelector("#content");
+    const container = document.querySelector("#content");
 
-  try {
-    const response = await fetch("analysisJSON");
+    try {
+        const response = await fetch("analysisJSON");
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        let data = await response.json();
+
+        const table = new google.visualization.Table(container);
+        table.draw(google.visualization.arrayToDataTable(data, false));
+    } catch (error) {
+        console.error(`Error fetching csv for Notion Analysis: ${error}`);
     }
-    let data = await response.json();
-
-    const table = new google.visualization.Table(container);
-    table.draw(google.visualization.arrayToDataTable(data, true));
-
-  } catch (error) {
-    console.error(`Error fetching csv for Notion Analysis: ${error}`);
-  }
 }
 
 // document.addEventListener("DOMContentLoaded", plotData);

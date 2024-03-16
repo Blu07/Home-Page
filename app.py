@@ -89,7 +89,7 @@ def anaylsisCSV():
 
 @app.route('/database')
 def database():
-    return send_from_directory('static/js', 'connect_firebase.js', mimetype='application/javascript')
+    return send_from_directory('static/js', 'plot_firebase.js', mimetype='application/javascript')
 
 
 

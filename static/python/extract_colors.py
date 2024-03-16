@@ -163,7 +163,7 @@ def color_scheme(filename, color_mode="light"):
     
     
     
-    clr_sch = [{""}]
+    clr_sch = [{"Hei": 3}]
     
     #color = colors[i]
     #print(color)

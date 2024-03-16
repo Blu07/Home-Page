@@ -194,10 +194,11 @@ main {
     section {
         height: 400px;
         width: 100svw;
-        width: calc(100svw - $scroll-bar-width - 25px);
+        width: calc(100svw - $scroll-bar-width);
 
         &#portfolio {
             padding-left: 0px;
+            
 
             #portfolio-list {
                 display: flex;

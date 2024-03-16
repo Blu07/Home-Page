@@ -27,7 +27,7 @@
     
     <main id="main">
         {% block main %}
-            {% block main_image %}
+            
             
             <div id="top-image">
                 <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
@@ -44,18 +44,18 @@
                 </div> -->
                 
             </div>
-            {% endblock %}
+            
         
 
             <!-- Top Bar -->
-            {% block top_bar %}            
+                      
             <div id="top-bar" style="background-size: 100% 100%">
                 <div id="top-bar-shade" class="shade"></div>
                 <a href="#portfolio"> PORTFOLIO </a>
                 <a href="#about-me"> ABOUT ME </a>
                 <a href="#contact"> CONTACT </a>
             </div>
-            {% endblock %}
+            
 
         
         
@@ -216,6 +216,7 @@
     {% block scripts %}
     
     <script src="{{ url_for('static', filename='js/contact.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 
       
     {% endblock %}

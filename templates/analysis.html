@@ -14,11 +14,14 @@
     <div id="content"></div>
 
 
-
+    
+    {% endblock %}
+    
+    
+    {% block scripts %}
+    <!-- Connect to Firestore Firebase -->
+    <script type="module" src="/database"></script>
+    
     <script src="{{ url_for('static', filename='js/plot.js') }}"></script>
-{% endblock %}
-
-
-{% block scripts %}
-
+    
 {% endblock %}

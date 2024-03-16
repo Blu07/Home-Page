@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, jsonify
+from flask import Flask, render_template, request, url_for, jsonify, send_from_directory
 import json
 import secrets
 import os
@@ -85,6 +85,11 @@ def anaylsisCSV():
     
     with open('uploads/analysisNotion.json') as file:
         return jsonify(json.load(file))
+
+
+@app.route('/database')
+def database():
+    return send_from_directory('static/js', 'connect_firebase.js', mimetype='application/javascript')
 
 
 

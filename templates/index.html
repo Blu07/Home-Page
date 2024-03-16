@@ -120,18 +120,18 @@
                     </div>
                     <div id="personal-info">
                         <h3>Informasjon om deg</h3>
-                        <label for="name" class="required">Hva heter du? </label>
-                        <input type="text" name="First Name" id="name" placeholder="Fornavn" required>
-                        <input type="text" name="Last Name" id="name" placeholder="Etternavn" required>
+                        <label for="f_name" class="required">Hva heter du? </label>
+                        <input type="text" name="First Name" id="f_name" placeholder="Fornavn" autocomplete="name" required>
+                        <input type="text" name="Last Name" id="l_name" placeholder="Etternavn" autocomplete="cc-name" required>
                         <br>
                         <label for="b_date">Hva er fødselsdatoen din?</label>
-                        <input type="date" name="Birth Date" id="b_date">
+                        <input type="date" name="Birth Date" id="b_date" autocomplete="bday">
                         <br>
                         <label for="email" class="required">E-postadressen din:</label>
-                        <input type="email" name="E-mail" id="email" placeholder="navnet.ditt@eksempel.no" required>
+                        <input type="email" name="E-mail" id="email" autocomplete="email" placeholder="navnet.ditt@eksempel.no" required>
                         <br>
                         <label for="phone_num">Tlf.nummeret ditt:</label>
-                        <input type="number" name="Phone Number" id="phone_num" placeholder="+47 197 45 374">
+                        <input type="number" name="Phone Number" id="phone_num" autocomplete="tel" placeholder="+47 197 45 374">
                         <br>
                         <br>
                     </div>
@@ -168,7 +168,7 @@
                             </div>
                         </div>
                         <div>
-                            <label for="order-date order-time"> Til når vil du bestille bord?</label>
+                            <label for="order-date"> Til når vil du bestille bord?</label>
                             <input type="date" name="Order Date" id="order-date">
                             <input type="time" name="Order Time" id="order-time">
                         </div>
@@ -207,8 +207,8 @@
         {% endblock %}
     </main>
     {% block scripts %}
-        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/contact.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='js/contact.js') }}"></script>
 
       
     {% endblock %}

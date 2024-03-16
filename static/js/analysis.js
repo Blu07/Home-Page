@@ -38,7 +38,7 @@ async function queryDatabase() {
 
   collection = JSON.stringify(collection, null, 2);
   
-  
+                  
 
 
   fs.writeFileSync("uploads/analysisNotion.json", collection);

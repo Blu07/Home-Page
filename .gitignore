@@ -167,3 +167,6 @@ node_modules/
 
 # CSS
 static/css/*.css
+
+# Secrets Config
+config/

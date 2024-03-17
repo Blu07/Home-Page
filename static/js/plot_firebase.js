@@ -39,38 +39,33 @@ const analytics = getAnalytics(app);
 // console.log(db);
 
 document.addEventListener("DOMContentLoaded", () => {
-    let button = document.getElementById("plotDataBtn");
+    addButtons(allNumberStats)
 
-    if (button) {
-        button.addEventListener("click", () => {
-            clearContentEl()
-            plotSleepTime()
-            plotNumbers()
-        });
-    }
+    document.getElementById("sleepAVG").addEventListener('click', plotSleepTime)
+    
 });
 
 
 function clearContentEl() {
     container.innerHTML = ""
+
+    Object.values(document.getElementsByClassName("active")).forEach(element => {
+        element.classList.remove("active")
+    })
 }
 
 // Load Google Chart elements
-google.charts.load("current", { packages: ["corechart"] });
+google.charts.load("current", { packages: ["corechart", "line"] });
 const container = document.querySelector("#content");
+const buttonsContainer = document.querySelector("#buttons");
 
 const collection_date = collection(db, "home-page", "science-analysis", "By Date")
 const collection_data_point = collection(db, "home-page", "science-analysis", "By Data Point")
 
+
 async function plotSleepTime() {
-    const sleepLengthEl = document.createElement("div")
-    sleepLengthEl.id = "Sovnlengde"
-    container.appendChild(sleepLengthEl)
-
-    function queryDay(day) {
-        return query(collection_date, where("Dag", "==", day))
-    }
-
+    clearContentEl()
+    
     const days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lordag", "Sondag"];
     const dataList = [["Natt til..", "Timer"]]
     
@@ -80,37 +75,40 @@ async function plotSleepTime() {
         const snapshot = await getAggregateFromServer(q, {
             averageLength: average("Sovnlengde")
         });
-        // console.log(day, snapshot.data().averageLength)
+        const avgLen = snapshot.data().averageLength
+        dataList.push([day, round(avgLen, 2)])
 
-        // dataList.push([day, sum/count])
-        // const data = google.visualization.arrayToDataTable(dataList, false);
-    
-        //   const options = {
-        //     chart: {
-        //       title: 'Søvnmengde',
-        //       subtitle: 'Timer søvn, gjennomsnittlig per dag',
-        //     }
-        //   };
-    
-        //   const chart = new google.charts.Bar(sleepLengthEl);
-    
-        //   chart.draw(data, google.charts.Bar.convertOptions(options));
+        const data = google.visualization.arrayToDataTable(dataList, false);
+        
+        const options = {
+            chart: {
+                title: 'Søvnmengde',
+                subtitle: 'Timer søvn, gjennomsnittlig per dag',
+            },
+            vAxis: {
+                minValue: 0,
+                viewWindow: {
+                    min: 0
+                }
+            }
+        };
+
+        const chart = new google.visualization.ColumnChart(container);
+
+        chart.draw(data, options);
     });
     
 }
 
-async function plotNumbers() {
-    const statsToPlot = ["Dato", "Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid", ]
-    const dataList = [[...statsToPlot]];
+const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid", ]
 
 
-    statsToPlot.forEach(async (point) => {
-        const containerEl = document.createElement("div")
-        containerEl.id = point
-        container.appendChild(containerEl)
-
-    })
+async function plotNumbers(stats=["HRV", "Hvilepuls"]) {
+    const statsToPlot = ["Dato", ...stats] 
+    const dataList = [statsToPlot];
     
+
+
     const q = query(collection_date, orderBy("Dato"))
     const snaphot = await getDocs(q)
 
@@ -119,23 +117,79 @@ async function plotNumbers() {
         const new_line = []
        
         statsToPlot.forEach(point => {
-            new_line.push(data[point])
-        })
+            let d = data[point]
 
+            if (point === "Dato") {
+                d = new Date(d).toISOString().split("T")[0];
+            }
+
+            new_line.push(d)
+        })
         dataList.push(new_line)
     })
-
+    
     
      const data = google.visualization.arrayToDataTable(dataList, false);
     
     const options = {
         title: 'Alle Talldata',
+        subtitle: 'i par',
+        series: {
+            // Gives each series an axis name that matches the Y-axis below.
+            0: {axis: '0'},
+            1: {axis: '1'}
+          },
+          axes: {
+            // Adds labels to each axis; they don't have to match the axis names.
+            y: {
+              0: {label: stats[0]},
+              1: {label: stats[1]}
+            }
+          }
     };
 
-    const chart = new google.visualization.LineChart(container);
-    chart.draw(data, options);
+
+    const chart = new google.charts.Line(container);
+    chart.draw(data, google.charts.Line.convertOptions(options));
+    // const chart = new google.visualization.LineChart(container);
+    // chart.draw(data, options);
 
     
+}
+
+
+function addButtons(statList) {
+    statList.forEach(point => {
+        const containerEl = document.createElement("btn")
+        containerEl.id = point
+        containerEl.innerText = point
+        buttonsContainer.appendChild(containerEl)
+        
+        containerEl.addEventListener('click', (event) => registerActiveButton(event))
+        
+    })
+}
+
+
+function registerActiveButton(event) {
+    const preActiveButtons = [...buttonsContainer.getElementsByClassName("active")];
+    const element = event.target;
+
+    if (element.classList.contains("active")) {
+        element.classList.remove("active");
+        return;
+    }
+
+    if (preActiveButtons.length >= 2) {
+        return;
+    }
+
+    element.classList.add("active");
+
+    if (preActiveButtons.length === 1) {
+        plotNumbers([preActiveButtons[0].id, element.id]);
+    }
+
 }
 
 
@@ -144,9 +198,11 @@ function timeToDecimal(t, dec=2) {
     return round(decimal, dec)
 }
 
+
 function decimalToTime(d) {
     return round(Math.floor(d) + (3/5)*(d - Math.floor(d)))
 }
+
 
 function round(num, dec=2) {
     const dec_fac = Math.pow(10, dec)

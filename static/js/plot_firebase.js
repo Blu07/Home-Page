@@ -160,12 +160,13 @@ async function plotNumbers(stats=["HRV", "Hvilepuls"]) {
 
 function addButtons(statList) {
     statList.forEach(point => {
-        const containerEl = document.createElement("btn")
-        containerEl.id = point
-        containerEl.innerText = point
-        buttonsContainer.appendChild(containerEl)
+        const btnEl = document.createElement("btn")
+        btnEl.id = point
+        btnEl.innerText = point
+        btnEl.classList.add("potent")
+        buttonsContainer.appendChild(btnEl)
         
-        containerEl.addEventListener('click', (event) => registerActiveButton(event))
+        btnEl.addEventListener('click', (event) => registerActiveButton(event))
         
     })
 }

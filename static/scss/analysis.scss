@@ -5,7 +5,7 @@
 main {
     display: flex;
     align-items: center;
-    flex-flow: column wrap;
+    flex-flow: column nowrap;
 
     width: 100svw;
     height: 100svh;
@@ -17,6 +17,51 @@ btn.active {
     border-radius: 4px;
 }
 
+#buttons {
+    display: flex;
+    flex-flow: row wrap;
+
+    justify-content: center;
+
+    width: 50%;
+    height: fit-content;
+
+    gap: 8px;
+
+    
+    btn {
+        padding: 7px 14px;
+        font-size: 16px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 1000;
+        text-align: center;
+        text-decoration: none;
+
+        color: $secondary-light-color;
+        background-color: $primary-light-color;
+        border: 2px solid $accent-light-color;
+
+        border-radius: $border-radius-large;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+        &.potent:hover {
+            color: $secondary-light-color;
+            background-color: adjust-color($color: $primary-light-color, $lightness: -4%);
+        }
+        
+        &.active {
+            color: $secondary-light-color;
+            background-color: $primary-light-color;
+            border-color: $accent-dark-color;
+            
+            &:hover {
+                background-color: adjust-color($color: $primary-light-color, $lightness: -4%);
+            }
+           
+
+        }
+    }
+}
 
 #content {
     // display: none;

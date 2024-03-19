@@ -39,74 +39,97 @@ const analytics = getAnalytics(app);
 // console.log(db);
 
 document.addEventListener("DOMContentLoaded", () => {
-    addButtons(allNumberStats)
+    drawButtons("s", allNumberStats, statButtonsContainer)
+    drawButtons("f", filters, filterButtonsContainer)
+    filterButtonsContainer.firstChild.classList.add("active")
 
-    document.getElementById("sleepAVG").addEventListener('click', plotSleepTime)
-    
+    document.getElementById("sleepAVG").addEventListener('click', () => {
+        plotByDay("Sovnlengde")
+    })
+
 });
 
 
-function clearContentEl() {
-    container.innerHTML = ""
-
-    Object.values(document.getElementsByClassName("active")).forEach(element => {
-        element.classList.remove("active")
-    })
-}
 
 // Load Google Chart elements
-google.charts.load("current", { packages: ["corechart", "line"] });
+google.charts.load("current", { packages: ["corechart", "line", "bar"] });
 const container = document.querySelector("#content");
-const buttonsContainer = document.querySelector("#buttons");
+const statButtonsContainer = document.querySelector("#stats");
+const filterButtonsContainer = document.querySelector("#filters");
 
 const collection_date = collection(db, "home-page", "science-analysis", "By Date")
 const collection_data_point = collection(db, "home-page", "science-analysis", "By Data Point")
 
+const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid",]
+allNumberStats.sort()
 
-async function plotSleepTime() {
-    clearContentEl()
-    
-    const days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lordag", "Sondag"];
-    const dataList = [["Natt til..", "Timer"]]
-    
-    days.forEach(async (day) => {
-        
-        const q = query(collection_date, where("Dag", "==", day))
-        const snapshot = await getAggregateFromServer(q, {
-            averageLength: average("Sovnlengde")
+const filters = ["Chronological", "Weekday"]
+
+
+
+async function plotByDay(stats = ["HRV", "Hvilepuls"]) {
+    clearContentEl();
+
+    const days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"];
+    // Adjusting dataList to include both stats in the header
+    const dataList = [["Natt til..", ...stats]];
+
+    // Create an array of promises for each day to fetch data
+    const dayPromises = days.map(async (day) => {
+        // Assuming you have a way to get aggregates for both stats (simulating here)
+        const promises = stats.map(stat => {
+            const q = query(collection_date, where("Dag", "==", day));
+            return getAggregateFromServer(q, { averageLength: average(stat) })
+                .then(snapshot => snapshot.data().averageLength);
         });
-        const avgLen = snapshot.data().averageLength
-        dataList.push([day, round(avgLen, 2)])
 
-        const data = google.visualization.arrayToDataTable(dataList, false);
-        
-        const options = {
-            chart: {
-                title: 'Søvnmengde',
-                subtitle: 'Timer søvn, gjennomsnittlig per dag',
-            },
-            vAxis: {
-                minValue: 0,
-                viewWindow: {
-                    min: 0
-                }
-            }
-        };
-
-        const chart = new google.visualization.ColumnChart(container);
-
-        chart.draw(data, options);
+        // Wait for both stats' data for the current day
+        return Promise.all(promises).then((values) => {
+            // Assuming the first value corresponds to the first stat and the second to the second stat, etc.
+            return [day, ...values.map(value => round(value, 2))];
+        });
     });
-    
+
+    // Wait for all day promises to resolve
+    const resolvedDays = await Promise.all(dayPromises);
+
+    // Since the days are in order, there's no need to sort, just push them into dataList
+    resolvedDays.forEach(dayData => dataList.push(dayData));
+
+    // Now that we have all the data, proceed to use it for charting
+    const data = google.visualization.arrayToDataTable(dataList, false);
+
+    const options = {
+        chart: {
+            title: 'Daglige Statistikker',
+            subtitle: 'Viser verdier for ' + stats.join(" og "),
+        },
+        series: {
+            0: { targetAxisIndex: 0 },
+            1: { targetAxisIndex: 1 }
+        },
+        vAxes: {
+            // Setter opp hver av Y-aksene
+            0: { title: stats[0] },
+            1: { title: stats[1] }
+        },
+        hAxis: {
+            title: 'Dag',
+        }
+    };
+
+    const chart = new google.charts.Bar(container);
+    chart.draw(data, google.charts.Line.convertOptions(options));
 }
 
-const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid", ]
 
 
-async function plotNumbers(stats=["HRV", "Hvilepuls"]) {
-    const statsToPlot = ["Dato", ...stats] 
+async function plotByDate(stats = ["HRV", "Hvilepuls"]) {
+    clearContentEl()
+
+    const statsToPlot = ["Dato", ...stats]
     const dataList = [statsToPlot];
-    
+
 
 
     const q = query(collection_date, orderBy("Dato"))
@@ -115,7 +138,7 @@ async function plotNumbers(stats=["HRV", "Hvilepuls"]) {
     snaphot.forEach(doc => {
         const data = doc.data()
         const new_line = []
-       
+
         statsToPlot.forEach(point => {
             let d = data[point]
 
@@ -127,25 +150,25 @@ async function plotNumbers(stats=["HRV", "Hvilepuls"]) {
         })
         dataList.push(new_line)
     })
-    
-    
-     const data = google.visualization.arrayToDataTable(dataList, false);
-    
+
+
+    const data = google.visualization.arrayToDataTable(dataList, false);
+
     const options = {
         title: 'Alle Talldata',
         subtitle: 'i par',
         series: {
             // Gives each series an axis name that matches the Y-axis below.
-            0: {axis: '0'},
-            1: {axis: '1'}
-          },
-          axes: {
+            0: { axis: '0' },
+            1: { axis: '1' }
+        },
+        axes: {
             // Adds labels to each axis; they don't have to match the axis names.
             y: {
-              0: {label: stats[0]},
-              1: {label: stats[1]}
+                0: { label: stats[0] },
+                1: { label: stats[1] }
             }
-          }
+        }
     };
 
 
@@ -154,26 +177,32 @@ async function plotNumbers(stats=["HRV", "Hvilepuls"]) {
     // const chart = new google.visualization.LineChart(container);
     // chart.draw(data, options);
 
-    
+
 }
 
-
-function addButtons(statList) {
-    statList.forEach(point => {
+function drawButtons(type, baseList, containerEL, maxMarked) {
+    baseList.forEach(name => {
         const btnEl = document.createElement("btn")
-        btnEl.id = point
-        btnEl.innerText = point
+        btnEl.id = name
+        btnEl.innerText = name
         btnEl.classList.add("potent")
-        buttonsContainer.appendChild(btnEl)
-        
-        btnEl.addEventListener('click', (event) => registerActiveButton(event))
-        
+        containerEL.appendChild(btnEl)
+
+        if (type === "s") {
+            btnEl.addEventListener('click', (event) => registerStatButton(event, containerEL, maxMarked))
+        } else if (type === "f") {
+            btnEl.addEventListener('click', (event) => registerFilterButton(event, containerEL, maxMarked))
+        } else {
+            console.error(`Button Type not recognised: ${type}`)
+        }
     })
 }
 
 
-function registerActiveButton(event) {
+
+function registerStatButton(event, buttonsContainer) {
     const preActiveButtons = [...buttonsContainer.getElementsByClassName("active")];
+    const activeFilterEl = [...filterButtonsContainer.getElementsByClassName("active")];
     const element = event.target;
 
     if (element.classList.contains("active")) {
@@ -188,26 +217,76 @@ function registerActiveButton(event) {
     element.classList.add("active");
 
     if (preActiveButtons.length === 1) {
-        plotNumbers([preActiveButtons[0].id, element.id]);
+        const preActiveBtn = preActiveButtons[0].id
+        const newActiveBtn = element.id
+        const filter = activeFilterEl[0].id
+
+        drawTable([preActiveBtn, newActiveBtn], filter)
     }
 
 }
 
+function drawTable(stats, filter, hei) {
+    console.log("Drawing table:", stats, filter, hei)
+    switch (filter) {
+        case "Chronological":
+            return plotByDate(stats);
+        case "Weekday":
+            plotByDay(stats);
 
-function timeToDecimal(t, dec=2) {
-    const decimal = Math.floor(t) + (5/3)*(t - Math.floor(t)) // Whole number + decimal version of original decimal (from 8.07): 8 + 0.12 , .07 -> .12
+    }
+
+
+}
+
+function registerFilterButton(event) {
+    const preActiveButtons = [...filterButtonsContainer.getElementsByClassName("active")];
+    const activeStatButtons = [...statButtonsContainer.getElementsByClassName("active")];
+    const element = event.target;
+
+    if (element.classList.contains("active")) {
+        element.classList.remove("active");
+        return;
+    }
+
+    preActiveButtons.forEach(activeFilter => {
+        activeFilter.classList.remove("active")
+    })
+
+    if (preActiveButtons.length <= 1) {
+        element.classList.add("active");
+
+        const filter = element.id
+        const stats = activeStatButtons.map((stat) => stat.id)
+
+        drawTable(stats, filter)
+
+    }
+
+}
+
+function clearContentEl() {
+    container.innerHTML = ""
+
+    // Object.values(document.getElementsByClassName("active")).forEach(element => {
+    //     element.classList.remove("active")
+    // })
+}
+
+function timeToDecimal(t, dec = 2) {
+    const decimal = Math.floor(t) + (5 / 3) * (t - Math.floor(t)) // Whole number + decimal version of original decimal (from 8.07): 8 + 0.12 , .07 -> .12
     return round(decimal, dec)
 }
 
 
 function decimalToTime(d) {
-    return round(Math.floor(d) + (3/5)*(d - Math.floor(d)))
+    return round(Math.floor(d) + (3 / 5) * (d - Math.floor(d)))
 }
 
 
-function round(num, dec=2) {
+function round(num, dec = 2) {
     const dec_fac = Math.pow(10, dec)
-    const rounded = Math.round(dec_fac*num)/dec_fac
-    
+    const rounded = Math.round(dec_fac * num) / dec_fac
+
     return rounded
 }

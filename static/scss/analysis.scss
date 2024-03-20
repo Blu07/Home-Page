@@ -26,7 +26,21 @@ btn.active {
     width: 50%;
     height: fit-content;
 
-    gap: 8px;
+    column-gap: 30px;
+    row-gap: 20px;
+
+    
+    > div {
+        display: flex;
+        flex-flow: row wrap;
+        
+        gap: 8px;
+
+        background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
+        padding: 4px;
+        border-radius: $border-radius-large + 2px;
+
+    }
 
     
     btn {
@@ -43,6 +57,9 @@ btn.active {
 
         border-radius: $border-radius-large;
         transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+        // Turn off text marking
+        user-select: none;
 
         &.potent:hover {
             color: $secondary-light-color;

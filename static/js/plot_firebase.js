@@ -35,27 +35,24 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
-// console.log("Det Funket! Her er objektet for databasen:");
-// console.log(db);
 
 document.addEventListener("DOMContentLoaded", () => {
-    drawButtons("s", allNumberStats, statButtonsContainer)
-    drawButtons("f", filters, filterButtonsContainer)
-    filterButtonsContainer.firstChild.classList.add("active")
-
-    document.getElementById("sleepAVG").addEventListener('click', () => {
-        plotByDay("Sovnlengde")
-    })
-
+    // Load Google Chart elements
+    google.charts.load("current", { packages: ["corechart", "line", "bar"] });
+    
+    drawButtons("stat", allNumberStats, statButtonsContainer)
+    drawButtons("filter", filters, filterButtonsContainer)
+    drawButtons("chartType", chartTypes, chartTypeButtonsContainer)
+    
+    addEventListener('resize', updateChart)
+    
+    google.charts.setOnLoadCallback(updateChart);
 });
 
-
-
-// Load Google Chart elements
-google.charts.load("current", { packages: ["corechart", "line", "bar"] });
 const container = document.querySelector("#content");
 const statButtonsContainer = document.querySelector("#stats");
 const filterButtonsContainer = document.querySelector("#filters");
+const chartTypeButtonsContainer = document.querySelector("#chartTypes");
 
 const collection_date = collection(db, "home-page", "science-analysis", "By Date")
 const collection_data_point = collection(db, "home-page", "science-analysis", "By Data Point")
@@ -64,14 +61,11 @@ const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppste
 allNumberStats.sort()
 
 const filters = ["Chronological", "Weekday"]
+const chartTypes = ["Bar", "Line"]
 
 
-
-async function plotByDay(stats = ["HRV", "Hvilepuls"]) {
-    clearContentEl();
-
-    const days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"];
-    // Adjusting dataList to include both stats in the header
+async function structureDataByDay(stats) {
+    const days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lordag", "Sondag"];
     const dataList = [["Natt til..", ...stats]];
 
     // Create an array of promises for each day to fetch data
@@ -98,7 +92,6 @@ async function plotByDay(stats = ["HRV", "Hvilepuls"]) {
 
     // Now that we have all the data, proceed to use it for charting
     const data = google.visualization.arrayToDataTable(dataList, false);
-
     const options = {
         chart: {
             title: 'Daglige Statistikker',
@@ -117,20 +110,12 @@ async function plotByDay(stats = ["HRV", "Hvilepuls"]) {
             title: 'Dag',
         }
     };
-
-    const chart = new google.charts.Bar(container);
-    chart.draw(data, google.charts.Line.convertOptions(options));
+    return [data, options]
 }
 
-
-
-async function plotByDate(stats = ["HRV", "Hvilepuls"]) {
-    clearContentEl()
-
+async function structureDataByDate(stats) {
     const statsToPlot = ["Dato", ...stats]
     const dataList = [statsToPlot];
-
-
 
     const q = query(collection_date, orderBy("Dato"))
     const snaphot = await getDocs(q)
@@ -151,9 +136,7 @@ async function plotByDate(stats = ["HRV", "Hvilepuls"]) {
         dataList.push(new_line)
     })
 
-
     const data = google.visualization.arrayToDataTable(dataList, false);
-
     const options = {
         title: 'Alle Talldata',
         subtitle: 'i par',
@@ -171,16 +154,34 @@ async function plotByDate(stats = ["HRV", "Hvilepuls"]) {
         }
     };
 
-
-    const chart = new google.charts.Line(container);
-    chart.draw(data, google.charts.Line.convertOptions(options));
-    // const chart = new google.visualization.LineChart(container);
-    // chart.draw(data, options);
-
-
+    return [data, options]
 }
 
-function drawButtons(type, baseList, containerEL, maxMarked) {
+function drawChartOfType(data, options, type) {
+    let chart;
+    let convertedOptions;
+
+    switch (type) {
+        case "Line":
+            chart = new google.charts.Line(container);
+            convertedOptions = google.charts.Line.convertOptions(options);
+            break;
+
+        case "Bar":
+            chart = new google.charts.Bar(container);
+            convertedOptions = google.charts.Bar.convertOptions(options);
+            break;
+
+        default:
+            chart = new google.charts.Bar(container);
+            convertedOptions = google.charts.Bar.convertOptions(options);
+            break;
+    }
+
+    chart.draw(data, convertedOptions);
+}
+
+function drawButtons(type, baseList, containerEL) {
     baseList.forEach(name => {
         const btnEl = document.createElement("btn")
         btnEl.id = name
@@ -188,99 +189,73 @@ function drawButtons(type, baseList, containerEL, maxMarked) {
         btnEl.classList.add("potent")
         containerEL.appendChild(btnEl)
 
-        if (type === "s") {
-            btnEl.addEventListener('click', (event) => registerStatButton(event, containerEL, maxMarked))
-        } else if (type === "f") {
-            btnEl.addEventListener('click', (event) => registerFilterButton(event, containerEL, maxMarked))
+        if (type === "stat") {
+            btnEl.addEventListener('click', (event) => registerStatButton(event, containerEL))
+        } else if (type === "filter" || type === "chartType") {
+            btnEl.addEventListener('click', (event) => registerFilterBtnPress(event, containerEL))
         } else {
             console.error(`Button Type not recognised: ${type}`)
         }
     })
+
+    // Automatically select the first element as active in Filters and Chart Types
+    containerEL.firstChild.classList.add("active")
 }
 
-
-
-function registerStatButton(event, buttonsContainer) {
-    const preActiveButtons = [...buttonsContainer.getElementsByClassName("active")];
-    const activeFilterEl = [...filterButtonsContainer.getElementsByClassName("active")];
+function registerStatButton(event) {        // , container) {
     const element = event.target;
-
+    
+    // If clicked and active, toggle active off
     if (element.classList.contains("active")) {
         element.classList.remove("active");
+        updateChart()
         return;
     }
-
-    if (preActiveButtons.length >= 2) {
-        return;
-    }
+    
+    // const preActiveButtons = [...container.getElementsByClassName("active")];
+    // Early return to disable selecting more than two stats at a time 
+    // if (preActiveButtons.length >= 2) {
+    //     return;
+    // }
 
     element.classList.add("active");
 
-    if (preActiveButtons.length === 1) {
-        const preActiveBtn = preActiveButtons[0].id
-        const newActiveBtn = element.id
-        const filter = activeFilterEl[0].id
-
-        drawTable([preActiveBtn, newActiveBtn], filter)
-    }
-
+    updateChart()
 }
 
-function drawTable(stats, filter, hei) {
-    console.log("Drawing table:", stats, filter, hei)
-    switch (filter) {
-        case "Chronological":
-            return plotByDate(stats);
-        case "Weekday":
-            plotByDay(stats);
-
-    }
-
-
-}
-
-function registerFilterButton(event) {
-    const preActiveButtons = [...filterButtonsContainer.getElementsByClassName("active")];
-    const activeStatButtons = [...statButtonsContainer.getElementsByClassName("active")];
+function registerFilterBtnPress(event, container) {
+    const preActiveButtons = [...container.getElementsByClassName("active")];
     const element = event.target;
 
-    if (element.classList.contains("active")) {
-        element.classList.remove("active");
-        return;
-    }
-
-    preActiveButtons.forEach(activeFilter => {
-        activeFilter.classList.remove("active")
+    // Remove all active buttons if there are multiple
+    preActiveButtons.forEach(activeBtn => {
+        activeBtn.classList.remove("active")
     })
 
     if (preActiveButtons.length <= 1) {
         element.classList.add("active");
+        updateChart()
+    }
+}
 
-        const filter = element.id
-        const stats = activeStatButtons.map((stat) => stat.id)
-
-        drawTable(stats, filter)
-
+async function updateChart() {
+    const stats = [...statButtonsContainer.getElementsByClassName("active")].map((v) => v.id);
+    const filter = [...filterButtonsContainer.getElementsByClassName("active")][0].id;
+    const cType = [...chartTypeButtonsContainer.getElementsByClassName("active")][0].id;
+   
+    // Determine which function to call based on the filter
+    let dataOptions;
+    if (filter === "Chronological") {
+        dataOptions = await structureDataByDate(stats);
+    } else if (filter === "Weekday") {
+        dataOptions = await structureDataByDay(stats);
     }
 
-}
+    // Destructure the returned array to get data and options
+    const [data, options] = dataOptions;
 
-function clearContentEl() {
-    container.innerHTML = ""
-
-    // Object.values(document.getElementsByClassName("active")).forEach(element => {
-    //     element.classList.remove("active")
-    // })
-}
-
-function timeToDecimal(t, dec = 2) {
-    const decimal = Math.floor(t) + (5 / 3) * (t - Math.floor(t)) // Whole number + decimal version of original decimal (from 8.07): 8 + 0.12 , .07 -> .12
-    return round(decimal, dec)
-}
-
-
-function decimalToTime(d) {
-    return round(Math.floor(d) + (3 / 5) * (d - Math.floor(d)))
+    // Now, pass the data and options to drawChartOfType
+    drawChartOfType(data, options, cType);
 }
 
 
@@ -290,3 +265,16 @@ function round(num, dec = 2) {
 
     return rounded
 }
+
+// Ubrukte funksjoner, trengs kanskje.
+
+// function timeToDecimal(t, dec = 2) {
+//     const decimal = Math.floor(t) + (5 / 3) * (t - Math.floor(t)) // Whole number + decimal version of original decimal (from 8.07): 8 + 0.12 , .07 -> .12
+//     return round(decimal, dec)
+// }
+
+
+// function decimalToTime(d) {
+//     return round(Math.floor(d) + (3 / 5) * (d - Math.floor(d)))
+// }
+

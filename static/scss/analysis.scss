@@ -7,6 +7,8 @@ main {
     align-items: center;
     flex-flow: column nowrap;
 
+    gap: 15px;
+
     width: 100svw;
     height: 100svh;
 
@@ -23,11 +25,13 @@ btn.active {
 
     justify-content: center;
 
-    width: 50%;
+
+    max-width: 50%;
+    // width: 50%;
     height: fit-content;
 
-    column-gap: 30px;
-    row-gap: 20px;
+    column-gap: 25px;
+    row-gap: 15px;
 
     
     > div {
@@ -36,10 +40,13 @@ btn.active {
         
         gap: 8px;
 
+        width: fit-content;
+
         background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
         padding: 4px;
         border-radius: $border-radius-large + 2px;
 
+        justify-content: center;
     }
 
     
@@ -54,6 +61,7 @@ btn.active {
         color: $secondary-light-color;
         background-color: $primary-light-color;
         border: 2px solid $accent-light-color;
+
 
         border-radius: $border-radius-large;
         transition: background-color 0.3s, color 0.3s, border-color 0.3s;
@@ -85,5 +93,16 @@ btn.active {
     
     width: 90svw;
     height: 800px;
-}
+    background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
+    padding: 8px;
+    border-radius: $border-radius-large + 2px;
+    
+    > div {
+        border-radius: $border-radius-large;
+        overflow: hidden;
+        padding: 10px;
+    }
+
+
+    }
 

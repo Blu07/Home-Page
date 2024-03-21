@@ -90,7 +90,7 @@ async function structureDataByDay(stats) {
     // Since the days are in order, there's no need to sort, just push them into dataList
     resolvedDays.forEach(dayData => dataList.push(dayData));
 
-    // Now that we have all the data, proceed to use it for charting
+    // Now that we have all the data
     const data = google.visualization.arrayToDataTable(dataList, false);
     const options = {
         chart: {
@@ -98,18 +98,28 @@ async function structureDataByDay(stats) {
             subtitle: 'Viser verdier for ' + stats.join(" og "),
         },
         series: {
-            0: { targetAxisIndex: 0 },
+            0: { targetAxisIndex: 0 }, // Use numerical indices for targetAxisIndex
             1: { targetAxisIndex: 1 }
         },
         vAxes: {
-            // Setter opp hver av Y-aksene
-            0: { title: stats[0] },
-            1: { title: stats[1] }
+            0: { 
+                title: stats[0],
+                viewWindow: {
+                    min: 0 // Ensure Y-axis starts at 0 for the first axis
+                }
+            },
+            1: { 
+                title: stats[1],
+                viewWindow: {
+                    min: 0 // Ensure Y-axis starts at 0 for the second axis
+                }
+            }
         },
         hAxis: {
             title: 'Dag',
         }
     };
+    
     return [data, options]
 }
 
@@ -138,22 +148,33 @@ async function structureDataByDate(stats) {
 
     const data = google.visualization.arrayToDataTable(dataList, false);
     const options = {
-        title: 'Alle Talldata',
-        subtitle: 'i par',
-        series: {
-            // Gives each series an axis name that matches the Y-axis below.
-            0: { axis: '0' },
-            1: { axis: '1' }
+        chart: {
+            title: 'Kronologiske Statistikker',
+            subtitle: 'Viser verdier for ' + stats.slice(0, -1).join(", ") + "og" + stats[-1],
         },
-        axes: {
-            // Adds labels to each axis; they don't have to match the axis names.
-            y: {
-                0: { label: stats[0] },
-                1: { label: stats[1] }
+        series: {
+            0: { targetAxisIndex: 0 }, // Use numerical indices for targetAxisIndex
+            1: { targetAxisIndex: 1 }
+        },
+        vAxes: {
+            0: { 
+                title: stats[0],
+                viewWindow: {
+                    min: 0 // Ensure Y-axis starts at 0 for the first axis
+                }
+            },
+            1: { 
+                title: stats[1],
+                viewWindow: {
+                    min: 0 // Ensure Y-axis starts at 0 for the second axis
+                }
             }
+        },
+        hAxis: {
+            title: 'Dato',
         }
     };
-
+    
     return [data, options]
 }
 

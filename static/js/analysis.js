@@ -1,199 +1,280 @@
-const { Client } = require("@notionhq/client");
-const fs = require("fs");
-require("dotenv").config();
+// Import the functions you need from the SDKs you need
+// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+import {
+    getFirestore,
+    query,
+    collection,
+    getDoc,
+    getDocs,
+    doc,
+    onSnapshot,
+    orderBy,
+    where,
+    limit,
+    average,
+    sum,
+    count,
+    getAggregateFromServer
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
 
-const admin = require("firebase-admin");
-const serviceAccount = require("../../config/firebase-adminsdk.json");
+// Web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyA_mnZupO4Y8-qDm_0UiXWf7zw4HLxoXjI",
+    authDomain: "blu-hp.firebaseapp.com",
+    projectId: "blu-hp",
+    storageBucket: "blu-hp.appspot.com",
+    messagingSenderId: "700062325335",
+    appId: "1:700062325335:web:579a4136f7d877276ca112",
+    measurementId: "G-PW4V6EKVDB",
+};
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const analytics = getAnalytics(app);
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Load Google Chart elements
+    google.charts.load("current", { packages: ["corechart", "line", "bar"] });
+    
+    drawButtons("stat", allNumberStats, statButtonsContainer)
+    drawButtons("filter", filters, filterButtonsContainer)
+    drawButtons("chartType", chartTypes, chartTypeButtonsContainer)
+    
+    addEventListener('resize', updateChart)
+    
+    google.charts.setOnLoadCallback(updateChart);
 });
 
-db = admin.firestore();
+const container = document.querySelector("#content");
+const statButtonsContainer = document.querySelector("#stats");
+const filterButtonsContainer = document.querySelector("#filters");
+const chartTypeButtonsContainer = document.querySelector("#chartTypes");
 
-const notion = new Client({
-    auth: process.env.NOTION_API_KEY,
-});
+const collection_date = collection(db, "home-page", "science-analysis", "By Date")
+const collection_data_point = collection(db, "home-page", "science-analysis", "By Data Point")
+
+const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid",]
+allNumberStats.sort()
+
+const filters = ["Chronological", "Weekday"]
+const chartTypes = ["Bar", "Line"]
 
 
-uploadToFireStore()
+async function structureDataByDay(stats) {
+    const days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lordag", "Sondag"];
+    const dataList = [["Natt til..", ...stats]];
 
-async function uploadToFireStore() {
-    // Connect to Database in Notion
-    const database = await notion.databases.query({
-        database_id: "6844d8419a974a2baba0096e9c3975df",
+    // Create an array of promises for each day to fetch data
+    const dayPromises = days.map(async (day) => {
+        // Assuming you have a way to get aggregates for both stats (simulating here)
+        const promises = stats.map(stat => {
+            const q = query(collection_date, where("Dag", "==", day));
+            return getAggregateFromServer(q, { averageLength: average(stat) })
+                .then(snapshot => snapshot.data().averageLength);
+        });
+
+        // Wait for both stats' data for the current day
+        return Promise.all(promises).then((values) => {
+            // Assuming the first value corresponds to the first stat and the second to the second stat, etc.
+            return [day, ...values.map(value => round(value, 2))];
+        });
     });
 
-    const results = database.results;
-    results.sort((a, b) => {
-        if (a.properties.Dato.start !== undefined && a.properties.Dato.start !== undefined) {
-            return (new Date(a.properties.Dato.date.start) || 0) - (new Date(b.properties.Dato.date.start) || 0)
+    // Wait for all day promises to resolve
+    const resolvedDays = await Promise.all(dayPromises);
+
+    // Since the days are in order, there's no need to sort, just push them into dataList
+    resolvedDays.forEach(dayData => dataList.push(dayData));
+
+    // Now that we have all the data, proceed to use it for charting
+    const data = google.visualization.arrayToDataTable(dataList, false);
+    const options = {
+        chart: {
+            title: 'Daglige Statistikker',
+            subtitle: 'Viser verdier for ' + stats.join(" og "),
+        },
+        series: {
+            0: { targetAxisIndex: 0 },
+            1: { targetAxisIndex: 1 }
+        },
+        vAxes: {
+            // Setter opp hver av Y-aksene
+            0: { title: stats[0] },
+            1: { title: stats[1] }
+        },
+        hAxis: {
+            title: 'Dag',
         }
-        return 0
-    });
-    
-    const datapoint_names = Object.keys(results[2].properties);
-    // Process the values of every property from Notion:
-    // [Date: {Datapoint: value}]
-    let col_by_DATE = [];
-    results.forEach((page) => {
-        let document = {};
-        Object.entries(page.properties).forEach(([prop_name, value]) => {
-            document[prop_name] = handleProperty(value);
-        });
-        col_by_DATE.push(document);
-    });
+    };
+    return [data, options]
+}
 
-    // Add to Firebase 'By Date' collection
-    col_by_DATE.forEach(day => {
-        // DateID in YYY-MM-DD
-        const dateString = new Date(day.Dato).toISOString().split("T")[0];
-        addDocToFirebase("home-page/science-analysis/By Date", dateString, day);
-    });
-    
-    // Aggregate data from Firebase 'By Date':
-    // [datapoint: {dateID: value}]
-    const sleepCollectionRef = db.collection("home-page/science-analysis/By Date");
-    const querySnapshot = await sleepCollectionRef.orderBy("Dato").get();
-    
-    let col_by_DP = {}
-    
-    datapoint_names.forEach(name => {
-        col_by_DP[name] = {};
-    });
-    
-    querySnapshot.forEach(doc => {
-        const data = doc.data();
-        
-        datapoint_names.forEach(datapoint => {
-            if (data[datapoint] !== undefined) {
-                col_by_DP[datapoint][doc.id] = data[datapoint];
+async function structureDataByDate(stats) {
+    const statsToPlot = ["Dato", ...stats]
+    const dataList = [statsToPlot];
+
+    const q = query(collection_date, orderBy("Dato"))
+    const snaphot = await getDocs(q)
+
+    snaphot.forEach(doc => {
+        const data = doc.data()
+        const new_line = []
+
+        statsToPlot.forEach(point => {
+            let d = data[point]
+
+            if (point === "Dato") {
+                d = new Date(d).toISOString().split("T")[0];
             }
-        });
-    });
 
-    
-    // Add to Firebase 'By Data Point' collection
-    Object.entries(col_by_DP).forEach(([doc, value]) => {
-        addDocToFirebase("home-page/science-analysis/By Data Point", doc, value);
+            new_line.push(d)
+        })
+        dataList.push(new_line)
     })
 
-
-    // Write copies to local files in uploads/ as JSON
-    // Read these files to understand the structure
-    col_by_DATE_JSON = JSON.stringify(col_by_DATE, null, 2);
-    col_by_DP_JSON = JSON.stringify(col_by_DP, null, 2);
-    fs.writeFileSync("uploads/analysisNotionByDATE.json", col_by_DATE_JSON);
-    fs.writeFileSync("uploads/analysisNotionByDATAPOINT.json", col_by_DP_JSON);
-}
-
-
-async function addDocToFirebase(collectionPath, docId, data) {
-    const docRef = db.collection(collectionPath).doc(docId);
-    await docRef.set(data);
-    console.log(`Added to '${collectionPath}' document with ID '${docId}'`);
-}
-
-function handleProperty(prop) {
-    const type = prop.type;
-
-    if (!prop[type]) {
-        return null;
-    }
-
-    switch (type) {
-        case "select":
-            return handleSelect(prop);
-        case "number":
-            return handleNumber(prop);
-        case "date":
-            return handleDate(prop);
-        case "multi_select":
-            return handleMultiSelect(prop);
-        case "title":
-            return handleTitle(prop);
-        default:
-            return handleUnknown(prop);
-    }
-}
-
-function handleSelect(prop) {
-    name_value = {
-        "<30min": 0,
-        ">30min": 1,
-
-        Underholdning: 0,
-        Produktivitet: 1,
-
-        Lett: 0,
-        Vanskelig: 1,
-
-        Lav: 0,
-        Høy: 1,
-
-        "Vanlig lavt": 0,
-        Forstyrrelser: 1,
-
-        Opplagt: 0.9,
-        Gjesper: 0.8,
-        "Mister Fokus": 0.5,
-        Sliten: 0.3,
-        Sovner: 0.1,
-
-        REM: 1,
-        Core: 2,
-        Deep: 3,
+    const data = google.visualization.arrayToDataTable(dataList, false);
+    const options = {
+        title: 'Alle Talldata',
+        subtitle: 'i par',
+        series: {
+            // Gives each series an axis name that matches the Y-axis below.
+            0: { axis: '0' },
+            1: { axis: '1' }
+        },
+        axes: {
+            // Adds labels to each axis; they don't have to match the axis names.
+            y: {
+                0: { label: stats[0] },
+                1: { label: stats[1] }
+            }
+        }
     };
 
-    return prop.select.name;
-    // return name_value[prop.select.name];
+    return [data, options]
 }
 
-function handleNumber(prop) {
-    console.log(prop)
-    if (prop.id === '%3DS%3DL') {
-        return timeToDecimal(prop.number)
+function drawChartOfType(data, options, type) {
+    let chart;
+    let convertedOptions;
+
+    switch (type) {
+        case "Line":
+            chart = new google.charts.Line(container);
+            convertedOptions = google.charts.Line.convertOptions(options);
+            break;
+
+        case "Bar":
+            chart = new google.charts.Bar(container);
+            convertedOptions = google.charts.Bar.convertOptions(options);
+            break;
+
+        default:
+            chart = new google.charts.Bar(container);
+            convertedOptions = google.charts.Bar.convertOptions(options);
+            break;
+    }
+
+    chart.draw(data, convertedOptions);
+}
+
+function drawButtons(type, baseList, containerEL) {
+    baseList.forEach(name => {
+        const btnEl = document.createElement("btn")
+        btnEl.id = name
+        btnEl.innerText = name
+        btnEl.classList.add("potent")
+        containerEL.appendChild(btnEl)
+
+        if (type === "stat") {
+            btnEl.addEventListener('click', (event) => registerStatButton(event, containerEL))
+        } else if (type === "filter" || type === "chartType") {
+            btnEl.addEventListener('click', (event) => registerFilterBtnPress(event, containerEL))
+        } else {
+            console.error(`Button Type not recognised: ${type}`)
+        }
+    })
+
+    // Automatically select the first element as active in Filters and Chart Types
+    containerEL.firstChild.classList.add("active")
+}
+
+function registerStatButton(event) {        // , container) {
+    const element = event.target;
+    
+    // If clicked and active, toggle active off
+    if (element.classList.contains("active")) {
+        element.classList.remove("active");
+        updateChart()
+        return;
     }
     
-    return prop.number;
+    // const preActiveButtons = [...container.getElementsByClassName("active")];
+    // Early return to disable selecting more than two stats at a time 
+    // if (preActiveButtons.length >= 2) {
+    //     return;
+    // }
+
+    element.classList.add("active");
+
+    updateChart()
 }
 
-function handleDate(prop) {
-    return new Date(prop.date.start).toISOString();
-}
+function registerFilterBtnPress(event, container) {
+    const preActiveButtons = [...container.getElementsByClassName("active")];
+    const element = event.target;
 
-function handleMultiSelect(prop) {
-    return prop.multi_select.map((s) => s.name);
-}
+    // Remove all active buttons if there are multiple
+    preActiveButtons.forEach(activeBtn => {
+        activeBtn.classList.remove("active")
+    })
 
-function handleTitle(prop) {
-    if (prop.title[0] !== undefined) {
-        return prop.title[0].plain_text;
+    if (preActiveButtons.length <= 1) {
+        element.classList.add("active");
+        updateChart()
     }
-    return "Day Unknown"
 }
 
-function handleUnknown(prop) {
-    console.log("Unknown type of property:", prop);
-    return null; // You can adjust this based on your needs
+async function updateChart() {
+    const stats = [...statButtonsContainer.getElementsByClassName("active")].map((v) => v.id);
+    const filter = [...filterButtonsContainer.getElementsByClassName("active")][0].id;
+    const cType = [...chartTypeButtonsContainer.getElementsByClassName("active")][0].id;
+   
+    // Determine which function to call based on the filter
+    let dataOptions;
+    if (filter === "Chronological") {
+        dataOptions = await structureDataByDate(stats);
+    } else if (filter === "Weekday") {
+        dataOptions = await structureDataByDay(stats);
+    }
+
+    // Destructure the returned array to get data and options
+    const [data, options] = dataOptions;
+
+    // Now, pass the data and options to drawChartOfType
+    drawChartOfType(data, options, cType);
 }
 
 
-
-
-
-function timeToDecimal(t, dec=2) {
-    const decimal = Math.floor(t) + (5/3)*(t - Math.floor(t)) // Whole number + decimal version of original decimal (from 8.07): 8 + 0.12 , .07 -> .12
-    return round(decimal, dec)
-}
-
-function decimalToTime(d) {
-    return round(Math.floor(d) + (3/5)*(d - Math.floor(d)))
-}
-
-function round(num, dec=2) {
+function round(num, dec = 2) {
     const dec_fac = Math.pow(10, dec)
-    const rounded = Math.round(dec_fac*num)/dec_fac
-    
+    const rounded = Math.round(dec_fac * num) / dec_fac
+
     return rounded
 }
+
+// Ubrukte funksjoner, trengs kanskje.
+
+// function timeToDecimal(t, dec = 2) {
+//     const decimal = Math.floor(t) + (5 / 3) * (t - Math.floor(t)) // Whole number + decimal version of original decimal (from 8.07): 8 + 0.12 , .07 -> .12
+//     return round(decimal, dec)
+// }
+
+
+// function decimalToTime(d) {
+//     return round(Math.floor(d) + (3 / 5) * (d - Math.floor(d)))
+// }
+

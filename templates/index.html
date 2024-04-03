@@ -1,67 +1,78 @@
 <!DOCTYPE html>
 <html lang="no">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-      <!-- Google Authentication
+    <!-- Google Authentication
         <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
         <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
       -->
     {% block head %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-        <title>Hjemmeside</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <title>Hjemmeside</title>
 
-        <style>
-            #top-bar,
-            #image-btn {
-                background-color: {{ primary_color }};
+    <style>
+        #top-bar,
+        #image-btn {
+            background-color: {
+                    {
+                    primary_color
+                }
             }
-        </style>
+
+            ;
+        }
+    </style>
 
     {% endblock %}
 
 </head>
+
 <body>
-    
+
     <main id="main">
+
+
+
+
         {% block main %}
-            
-            
-            <div id="top-image">
-                <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
-                
-                <button id="change-image-btn" class="bg-primary" onclick="changeMainImage()">
-                    <img id="change-image-btn-icon" src="{{ url_for('static', filename='images/reload.png') }}" alt="Reload Icon">
-                    <p id="image-btn-p">Change Image</p>
-                </button>
-                <!--             
+        <div id="top-image">
+            <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
+
+            <button id="change-image-btn" class="bg-primary" onclick="changeMainImage()">
+                <img id="change-image-btn-icon" src="{{ url_for('static', filename='images/reload.png') }}"
+                    alt="Reload Icon">
+                <p id="image-btn-p">Change Image</p>
+            </button>
+            <!--             
                 <div class="colors">
                     <div class="bg-primary">Primary Color</div>
                     <div class="bg-secondary">Secondary Color</div>
                     <div class="bg-accent">Accent Color</div>
                 </div> -->
-                
-            </div>
-            
-        
 
-            <!-- Top Bar -->
-                      
-            <div id="top-bar" style="background-size: 100% 100%">
-                <div id="top-bar-shade" class="shade"></div>
-                <a href="#portfolio"> PORTFOLIO </a>
-                <a href="#about-me"> ABOUT ME </a>
-                <a href="#contact"> CONTACT </a>
-            </div>
-            
+        </div>
 
-        
-        
+
+        <!-- Top Bar -->
+
+        <div id="top-bar" style="background-size: 100% 100%">
+            <div id="top-bar-shade" class="shade"></div>
+            <a href="#portfolio"> PORTFOLIO </a>
+            <a href="#about-me"> ABOUT ME </a>
+            <a href="#contact"> CONTACT </a>
+        </div>
+
+
+
         <section id="portfolio">
-            <h1>Portfolio</h1>
-            <div id="portfolio-list">
+            <div class="heading">
+                <h1>Portfolio</h1>
+            </div>
+            <div id="portfolio-list" class="content-block">
 
                 <div class="card project">
                     <h2>Shop</h2>
@@ -90,135 +101,150 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="about-me">
-            <div id="about-me-block" class="fall-768px">
-                <div id="about-me-text">
-                    <h1>About Me</h1>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione debitis, incidunt in odit praesentium quas eos accusantium magnam cupiditate architecto est aliquam rem iste, suscipit, ex dolorum necessitatibus eaque facilis.</p>
-                </div>
-                <div id="about-me-img">
-                    <img src="#" alt="Meg">
+            <div class="heading">
+                <h1>About Me</h1>
+            </div>
+            <div class="center-screen content-block">
+                <div id="about-me-block" class="fall-768px">
+                    <div id="about-me-text">
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione debitis, incidunt in odit
+                            praesentium quas eos accusantium magnam cupiditate architecto est aliquam rem iste,
+                            suscipit, ex dolorum necessitatibus eaque facilis.</p>
+                    </div>
+                    <div id="about-me-img">
+                        <img src="/static/images/cookie.png" alt="Meg">
+                    </div>
                 </div>
             </div>
         </section>
-        
+
         <section id="contact">
-            <h1>Hi, contact me here :&rpar;</h1>
-            <form onsubmit="return validateForm()" method="get" id="contact-form">
-                <div class="fall-768px">
-                    <div id="cats">
-                        <h3 class="required">Hvor mange katter vil du ha?</h3>
-                        <input type="radio" name="Number of Cats" id="no_cat" value="0" required>
-                        <label for="no_cat">Ingen</label>
-                        <br>
-                        <input type="radio" name="Number of Cats" id="one_cat" value="1" required>
-                        <label for="one_cat">En</label>
-                        <br>
-                        <input type="radio" name="Number of Cats" id="two_cat" value="2" required>
-                        <label for="two_cat">To</label>
-                        <br>
-                        <input type="radio" name="Number of Cats" id="three_cat" value="3" required>
-                        <label for="three_cat">Tre</label>
-                        <br>
-                        <input type="radio" name="Number of Cats" id="four_more_cat" value="4+" required>
-                        <label for="four_more_cat">Fire eller flere</label>
-                        <br><br>
-                    </div>
-                    <div id="personal-info">
-                        <h3>Informasjon om deg</h3>
-                        <label for="f_name" class="required">Hva heter du? </label>
-                        <input type="text" name="First Name" id="f_name" placeholder="Fornavn" autocomplete="name" required>
-                        <input type="text" name="Last Name" id="l_name" placeholder="Etternavn" autocomplete="cc-name" required>
-                        <br>
-                        <label for="b_date">Hva er fødselsdatoen din?</label>
-                        <input type="date" name="Birth Date" id="b_date" autocomplete="bday">
-                        <br>
-                        <label for="email" class="required">E-postadressen din:</label>
-                        <input type="email" name="E-mail" id="email" autocomplete="email" placeholder="navnet.ditt@eksempel.no" required>
-                        <br>
-                        <label for="phone_num">Tlf.nummeret ditt:</label>
-                        <input type="number" name="Phone Number" id="phone_num" autocomplete="tel" placeholder="+47 197 45 374">
-                        <br>
-                        <br>
-                    </div>
-                    <div style="width: 100%; margin: 0px"></div>
-                    <div id="food">
-                        <h3>Hvilken mat liker du?</h3>
-                        <input type="checkbox" name="Liked Foods" id="taco" value="Taco">
-                        <label for="taco">Taco</label>
-                        <br>
-                        <input type="checkbox" name="Liked Foods" id="pizza" value="Pizza">
-                        <label for="pizza">Pizza</label>
-                        <br>
-                        <input type="checkbox" name="Liked Foods" id="sushi" value="Sushi">
-                        <label for="sushi">Sushi</label>
-                        <br>
-                        <input type="checkbox" name="Liked Foods" id="hamburger" value="Hamburger">
-                        <label for="hamburger">Hamburger</label>
-                        <br>
-                        <input type="checkbox" name="Liked Foods" id="fisk" value="Fisk">
-                        <label for="fisk">Fisk</label>
-                        <br>
-                        <input type="checkbox" name="Liked Foods" id="ribbe" value="Ribbe">
-                        <label for="ribbe">Ribbe</label>
-                        <br>
-                        <br>
-                    </div>
-                    <div id="order">
-                        <h3>Bestill Bord</h3>
-                        <div class="centered-one-line">
-                            <label for="guests-num" class="required"> Hvor mange gjester kommer?</label>
-                            <div class="force-next-to-be">
-                                <input type="range" name="Number of Guests" id="guests-num" value="invalid" min="1" max="9" oninput="this.nextElementSibling.innerHTML = this.value" required>
-                                <output>?</output>
+            <div class="heading">
+                <h1>Hi, contact me here :&rpar;</h1>
+            </div>
+            <div id="contact-block" class="content-block center-screen">
+                <form onsubmit="return validateForm()" method="get" id="contact-form">
+                    <div class="fall-768px">
+                        <div id="cats">
+                            <h3 class="required">Hvor mange katter vil du ha?</h3>
+                            <input type="radio" name="Number of Cats" id="no_cat" value="0" required>
+                            <label for="no_cat">Ingen</label>
+                            <br>
+                            <input type="radio" name="Number of Cats" id="one_cat" value="1" required>
+                            <label for="one_cat">En</label>
+                            <br>
+                            <input type="radio" name="Number of Cats" id="two_cat" value="2" required>
+                            <label for="two_cat">To</label>
+                            <br>
+                            <input type="radio" name="Number of Cats" id="three_cat" value="3" required>
+                            <label for="three_cat">Tre</label>
+                            <br>
+                            <input type="radio" name="Number of Cats" id="four_more_cat" value="4+" required>
+                            <label for="four_more_cat">Fire eller flere</label>
+                            <br><br>
+                        </div>
+                        <div id="personal-info">
+                            <h3>Informasjon om deg</h3>
+                            <label for="f_name" class="required">Hva heter du? </label>
+                            <input type="text" name="First Name" id="f_name" placeholder="Fornavn"
+                                autocomplete="given-name" required>
+                            <input type="text" name="Last Name" id="l_name" placeholder="Etternavn"
+                                autocomplete="family-name" required>
+                            <br>
+                            <label for="b_date">Hva er fødselsdatoen din?</label>
+                            <input type="date" name="Birth Date" id="b_date" autocomplete="bday">
+                            <br>
+                            <label for="email" class="required">E-postadressen din:</label>
+                            <input type="email" name="E-mail" id="email" autocomplete="email"
+                                placeholder="navnet.ditt@eksempel.no" required>
+                            <br>
+                            <label for="phone_num">Tlf.nummeret ditt:</label>
+                            <input type="number" name="Phone Number" id="phone_num" autocomplete="tel"
+                                placeholder="+47 197 45 374">
+                            <br>
+                            <br>
+                        </div>
+                        <div style="width: 100%; margin: 0px"></div>
+                        <div id="food">
+                            <h3>Hvilken mat liker du?</h3>
+                            <input type="checkbox" name="Liked Foods" id="taco" value="Taco">
+                            <label for="taco">Taco</label>
+                            <br>
+                            <input type="checkbox" name="Liked Foods" id="pizza" value="Pizza">
+                            <label for="pizza">Pizza</label>
+                            <br>
+                            <input type="checkbox" name="Liked Foods" id="sushi" value="Sushi">
+                            <label for="sushi">Sushi</label>
+                            <br>
+                            <input type="checkbox" name="Liked Foods" id="hamburger" value="Hamburger">
+                            <label for="hamburger">Hamburger</label>
+                            <br>
+                            <input type="checkbox" name="Liked Foods" id="fisk" value="Fisk">
+                            <label for="fisk">Fisk</label>
+                            <br>
+                            <input type="checkbox" name="Liked Foods" id="ribbe" value="Ribbe">
+                            <label for="ribbe">Ribbe</label>
+                            <br>
+                            <br>
+                        </div>
+                        <div id="order">
+                            <h3>Bestill Bord</h3>
+                            <div class="centered-one-line">
+                                <label for="guests-num" class="required"> Hvor mange gjester kommer?</label>
+                                <div class="force-next-to-be">
+                                    <input type="range" name="Number of Guests" id="guests-num" value="invalid" min="1"
+                                        max="9" oninput="this.nextElementSibling.innerHTML = this.value" required>
+                                    <output>?</output>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="order-date"> Til når vil du bestille bord?</label>
+                                <input type="date" name="Order Date" id="order-date">
+                                <input type="time" name="Order Time" id="order-time">
+                            </div>
+                            <div id="food">
+                                <h3>Hvilke retter ønsker dere?</h3>
+                                <input type="checkbox" name="Dish" id="amuse-bouche" value="Appetittvekker">
+                                <label for="taco">Appetittvekker</label>
+                                <br>
+                                <input type="checkbox" name="Dish" id="appetizer" value="Forrett">
+                                <label for="appetizer">Forrett</label>
+                                <br>
+                                <input type="checkbox" name="Dish" id="main-course" value="Hovedrett">
+                                <label for="main-course">Hovedrett</label>
+                                <br>
+                                <input type="checkbox" name="Dish" id="side-dish" value="Side Dish">
+                                <label for="side-dish">Siderett</label>
+                                <br>
+                                <input type="checkbox" name="Dish" id="dessert" value="Dessert">
+                                <label for="dessert">Dessert</label>
+                                <br>
+                                <br>
                             </div>
                         </div>
-                        <div>
-                            <label for="order-date"> Til når vil du bestille bord?</label>
-                            <input type="date" name="Order Date" id="order-date">
-                            <input type="time" name="Order Time" id="order-time">
-                        </div>
-                        <div id="food">
-                            <h3>Hvilke retter ønsker dere?</h3>
-                            <input type="checkbox" name="Dish" id="amuse-bouche" value="Appetittvekker">
-                            <label for="taco">Appetittvekker</label>
-                            <br>
-                            <input type="checkbox" name="Dish" id="appetizer" value="Forrett">
-                            <label for="appetizer">Forrett</label>
-                            <br>
-                            <input type="checkbox" name="Dish" id="main-course" value="Hovedrett">
-                            <label for="main-course">Hovedrett</label>
-                            <br>
-                            <input type="checkbox" name="Dish" id="side-dish" value="Side Dish">
-                            <label for="side-dish">Siderett</label>
-                            <br>
-                            <input type="checkbox" name="Dish" id="dessert" value="Dessert">
-                            <label for="dessert">Dessert</label>
-                            <br>
-                            <br>
-                        </div>
                     </div>
-                </div>
-                <div id="submit">
-                    <button type="submit">Send inn</button>
-                </div>
-            </form>
+                    <div id="submit">
+                        <button type="submit">Send inn</button>
+                    </div>
+                </form>
         </section>
 
-       
-        
+
+
         <div id="scrollbar-shade" class="shade"></div>
-        
-        
+
+
         {% endblock %}
     </main>
     {% block scripts %}
-    
+
     <script src="{{ url_for('static', filename='js/contact.js') }}"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 
-      
+
     {% endblock %}
 </body>
+
 </html>

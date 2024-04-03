@@ -150,7 +150,6 @@ function handleSelect(prop) {
 }
 
 function handleNumber(prop) {
-    console.log(prop)
     if (prop.id === '%3DS%3DL') {
         return timeToDecimal(prop.number)
     }

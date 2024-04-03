@@ -11,23 +11,28 @@ $shade-thickness: 5px;
 $top-bar-height: 50px;
 $image-height: calc(100svh - $top-bar-height);
 
+$section-heading-height: 70px;
+$section-content-height: 330px;
+
 $scroll-bar-width: 15px;
 $scroll-bar-height: 15px;
 
 $border-radius-small: 4px;
 $border-radius-large: 8px;
 
+
+
 body {
     background-color: $primary-light-color;
     color: $secondary-light-color;
-
+    
     margin: 0px;
     height: 100svh;
-
+    
     padding-bottom: 10px;
-
+    
     overflow: hidden;
-
+    
     box-sizing: border-box;
 }
 
@@ -37,13 +42,15 @@ body {
 
 main {
     display: block;
-
+    
     width: 100svw;
     height: 100svh;
-
+    
     overflow-y: auto;
     overflow-x: hidden;
     overflow-anchor: auto;
+    
+    scroll-behavior: smooth;
 
     #top-image {
         display: block;
@@ -192,9 +199,30 @@ main {
     }
 
     section {
-        height: 400px;
+        height: $section-heading-height + $section-content-height;
         width: 100svw;
         width: calc(100svw - $scroll-bar-width);
+
+        .heading {
+            height: $section-heading-height;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            > * {
+                padding: 0px;
+                margin: 0px;
+            }
+        }
+
+        .content-block {
+            height: $section-content-height;
+            
+            padding: 10px 20px;
+
+            box-sizing: border-box;
+        }
 
         &#portfolio {
             padding-left: 0px;
@@ -204,42 +232,43 @@ main {
                 display: flex;
                 flex-flow: row nowrap;
 
-                padding: 10px 20px;
                 column-gap: 8px;
 
                 overflow-x: scroll;
-
+                overflow-y: hidden;
+                
                 .card {
                     width: 200px;
                     min-width: 200px;
-                    height: 300px;
-                    max-height: inherit;
-
+                    height: 100%;
+                    max-height: 100%;
+                    
                     padding: 4px;
-
+                    
                     border: 2px solid $secondary-light-color;
                     border-radius: $border-radius-large;
+                    
+                    box-sizing: border-box;
                 }
             }
         }
 
         &#about-me {
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: center;
-
-            background-color: rgb(246, 230, 211);
-
-            #about-me-block {
             
-                border: 1px solid black;
-                width: max(50%, 400px);
-                padding: 10px 20px;
+            background-color: rgb(246, 230, 211);
+            
+            #about-me-block {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+
+                width: max(50%, 500px);
+                column-gap: 5%;
+
                 box-sizing: border-box;
                 
                 #about-me-text {
-                    border: 1px solid black;
-                    width: max(50%, 300px);
+                    width: 60%;
                     
                     p {
                         font-size: 18px;
@@ -248,15 +277,27 @@ main {
                 }
                 
                 #about-me-img {
-                    border: 1px solid black;
-                    width: max(50%, 300px);
-                    height: auto;
+                    height: 100%;
+                    max-height: inherit;
+                    width: 35%;
+
+                    img {
+                        max-height: 100%;
+                        max-width: 100%;
+                    }
                 }
             }
         }
 
         &#contact {
-            form {
+            height: fit-content;
+            
+            #contact-block {
+                height: fit-content;
+
+            }
+            
+            #contact-form {
                 .flex {
                     display: block;
                     flex-flow: row wrap;
@@ -274,6 +315,8 @@ main {
 
                 max-width: calc(100svw - $scroll-bar-width - 25px);
                 width: fit-content;
+
+                height: fit-content;
 
                 box-sizing: border-box;
 
@@ -383,6 +426,10 @@ main {
         }
     }
     
+    .center-screen {
+        display: flex;
+        justify-content: center;
+    }
 
 
     @media only screen and (min-width: 769px) {

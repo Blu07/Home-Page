@@ -1,4 +1,5 @@
 $primary-light-color: rgb(247, 233, 224);
+$primary-light-color-darker: adjust_color($primary-light-color, $lightness: -5%);
 $secondary-light-color: rgb(51, 42, 42);
 $accent-light-color: goldenrod;
 
@@ -28,7 +29,7 @@ body {
     
     margin: 0px;
     height: 100svh;
-    
+
     padding-bottom: 10px;
     
     overflow: hidden;
@@ -51,6 +52,7 @@ main {
     overflow-anchor: auto;
     
     scroll-behavior: smooth;
+    
 
     #top-image {
         display: block;
@@ -73,6 +75,9 @@ main {
             justify-content: center;
             flex-flow: column nowrap;
 
+            font-size: xx-small;
+            font-weight: 800;
+
             position: absolute;
             bottom: 50px;
             right: 50px;
@@ -90,11 +95,6 @@ main {
                 object-fit: contain;
                 width: 90%;
                 height: 90%;
-            }
-
-            p {
-                font-size: xx-small;
-                font-weight: 800;
             }
         }
 
@@ -132,15 +132,24 @@ main {
         justify-content: center;
         align-items: center;
         gap: max(40px, 10%);
-        padding: 0px;
-        box-sizing: border-box;
-
+        
+        z-index: 100;
+        
         position: sticky;
         top: 0px;
-
+        
+        background-color: $primary-light-color;
+        // background: linear-gradient($primary-light-color 90%, transparent);
+        
         width: 100svw;
         height: $top-bar-height + $shade-thickness;
-        padding-bottom: $shade-thickness;
+        
+        padding: 0px;
+
+        border-bottom: 2px solid $primary-light-color-darker;
+
+        
+        // box-sizing: border-box;
 
         a {
             padding: 7px 14px;
@@ -152,7 +161,7 @@ main {
 
             color: $primary-light-color;
             background-color: $secondary-light-color;
-            border: 2px solid $accent-light-color;
+            border: 1px solid $accent-light-color;
 
             border-radius: $border-radius-large;
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
@@ -170,6 +179,7 @@ main {
             }
         }
     }
+    
 
     .shade {
         content: "";
@@ -190,7 +200,7 @@ main {
     }
 
     #top-bar-shade {
-        bottom: -1px;
+        bottom: $top-bar-height + $shade-thickness;
         left: 0px;
         width: 100svw;
         height: $shade-thickness;
@@ -236,19 +246,49 @@ main {
 
                 overflow-x: scroll;
                 overflow-y: hidden;
+
+                perspective: 1000px;
                 
                 .card {
+                    display: grid;
+                    grid-template-columns: 100%;
+                    grid-template-rows: 40px 1fr;
+                    gap: 5px;
+
                     width: 200px;
                     min-width: 200px;
                     height: 100%;
                     max-height: 100%;
                     
-                    padding: 4px;
+                    padding: 10px 6px;
                     
                     border: 2px solid $secondary-light-color;
                     border-radius: $border-radius-large;
+                    box-shadow: 0.4em 0.5em 0.5em -0.4em black;
+
+                    color: $primary-dark-color;
+                    text-decoration: none;
                     
                     box-sizing: border-box;
+
+                    transform-origin: bottom center;
+                    transform-style: preserve-3d;
+                    transition: transform 200ms;
+                    animation-timing-function: cubic-bezier(0.1, -0.6, 0.2, 0);
+                    
+                    &:hover,
+                    &:focus {
+                        transform: scale(1.01);
+                    }
+
+                    h2, p {
+                        margin: 0px;
+                    }
+
+                    p {
+                        line-height: 1.5;
+                    }
+
                 }
             }
         }

@@ -2,108 +2,184 @@
 
 
 
+
 main {
     display: flex;
-    align-items: center;
-    flex-flow: column nowrap;
-
-    gap: 15px;
-
+    justify-content: center;
+    
     width: 100svw;
     height: 100svh;
 
+    #all-content {
+        display: flex;
+        align-items: center;
+        flex-flow: column nowrap;
+
+        gap: 40px;
+
+        width: min(61.8svw, 750px);
+        height: 100svh;
+    }
+
 }
 
-btn.active {
-    border: 1px solid black;
-    border-radius: 4px;
+img {
+    border-radius: $border-radius-large;
+    background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
+    
+    padding: 4px;
+    line-height: 150%;
 }
 
-#buttons {
+.part {
     display: flex;
-    flex-flow: row wrap;
+    align-items: flex-start;
+    flex-flow: column nowrap;
+    
 
-    justify-content: center;
-
-
-    max-width: 50%;
-    // width: 50%;
+    width: 100%;
     height: fit-content;
 
-    column-gap: 25px;
-    row-gap: 15px;
+    &.center {
+        align-items: center;
+    }
+
+    > h2 {
+        margin-left: -1em;
+    }
+
+    p, ol, ul {
+        line-height: 180%;
+    }
+
 
     
-    > div {
+
+}
+
+
+#part-2 .sub-part-3 {
+    h4 {
+        font-style: italic;
+    }
+
+    > ul {
+        display: flex;
+        flex-flow: column nowrap;
+        
+        padding-left: 4px;
+        
+        li {
+            display: grid;
+            grid-template-columns: 38.2% 61.8%;
+
+            div {
+                overflow: hidden;
+            }
+
+            p {
+                line-height: 140%;
+                margin: 6px 4px;
+
+            }
+        }
+    }
+}
+
+
+#part-4 {
+    btn.active {
+        border: 1px solid black;
+        border-radius: 4px;
+    }
+    
+    #buttons {
         display: flex;
         flex-flow: row wrap;
         
-        gap: 8px;
-
-        width: fit-content;
-
-        background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
-        padding: 4px;
-        border-radius: $border-radius-large + 2px;
-
         justify-content: center;
-    }
-
-    
-    btn {
-        padding: 7px 14px;
-        font-size: 16px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-weight: 1000;
-        text-align: center;
-        text-decoration: none;
-
-        color: $secondary-light-color;
-        background-color: $primary-light-color;
-        border: 2px solid $accent-light-color;
-
-
-        border-radius: $border-radius-large;
-        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-
-        // Turn off text marking
-        user-select: none;
-
-        &.potent:hover {
-            color: $secondary-light-color;
-            background-color: adjust-color($color: $primary-light-color, $lightness: -4%);
+        
+        
+        max-width: 50%;
+        // width: 50%;
+        height: fit-content;
+        
+        column-gap: 25px;
+        row-gap: 15px;
+        
+        
+        > div {
+            display: flex;
+            flex-flow: row wrap;
+            
+            gap: 8px;
+            
+            width: fit-content;
+            
+            background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
+            padding: 4px;
+            border-radius: $border-radius-large + 2px;
+            
+            justify-content: center;
         }
         
-        &.active {
+        
+        btn {
+            padding: 7px 14px;
+            font-size: 16px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-weight: 1000;
+            text-align: center;
+            text-decoration: none;
+            
             color: $secondary-light-color;
             background-color: $primary-light-color;
-            border-color: $accent-dark-color;
+            border: 2px solid $accent-light-color;
             
-            &:hover {
+            
+            border-radius: $border-radius-large;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            
+            // Turn off text marking
+            user-select: none;
+            
+            &.potent:hover {
+                color: $secondary-light-color;
                 background-color: adjust-color($color: $primary-light-color, $lightness: -4%);
             }
-           
-
+            
+            &.active {
+                color: $secondary-light-color;
+                background-color: $primary-light-color;
+                border-color: $accent-dark-color;
+                
+                &:hover {
+                    background-color: adjust-color($color: $primary-light-color, $lightness: -4%);
+                }
+                
+                
+            }
         }
     }
+    
+    #content {
+        // display: none;
+        
+        width: 90svw;
+        height: 500px;
+        background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
+        padding: 6px;
+        border-radius: $border-radius-large + 2px;
+        
+        > div {
+            border-radius: $border-radius-large;
+            overflow: hidden;
+            padding: 0px;
+            
+        }
+        
+        
+    }
+    
+    
 }
-
-#content {
-    // display: none;
-    
-    width: 90svw;
-    height: 800px;
-    background-color: adjust-color($color: $primary-light-color, $lightness: -3%);
-    padding: 8px;
-    border-radius: $border-radius-large + 2px;
-    
-    > div {
-        border-radius: $border-radius-large;
-        overflow: hidden;
-        padding: 0px;
-
-    }
-
-
-    }
-

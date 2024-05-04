@@ -2,27 +2,265 @@
 
 
 {% block head %}
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/analysis.css') }}">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analysis.css') }}">
 {% endblock %}
 
 {% block main %}
-    <h1>Analyse</h1>
+<div id="all-content">
 
-    <div id="buttons">
-        <div id="filters"></div>
-        <div id="chartTypes"></div>
-        <div id="stats"></div>
+    <h1 id="main-heading">Prosjekt Soloppgang</h1>
+
+    <div id="part-0" class="part">
+        <h2>Sammendrag</h2>
+        <p>Studien har funnet at ...</p>
     </div>
-    
-    <div id="content"></div>
+
+    <div id="part-1" class="part">
+        <h2>1 Innledning</h2>
+        <div class="sub-part-1">
+            <h3>1.1 Bakgrunn og Mål</h3>
+            <p>Dette prosjektet var motivert av en personlig opplevelse av generelt bedre opplevelse med å stå opp etter
+                installasjon av smartlampe.</p>
+
+            <p>I tillegg var observasjonen av store forskjeller mellom medelevers søvn- og døgnrytme med på å utvikle en
+                hypotese som kunne etterprøves og dermed avkreftes eller bekreftes.</p>
+
+            <p>Målet med denne analysen er å finne ut om å bruke en smartlampe gir bedre opplevelse av
+                morgenoppvåkningen.</p>
+        </div>
+
+        <div class="sub-part-1">
+            <h3>1.2 Hypotese</h3>
+            <p>Ved å ta i bruk en smartlampe som gradvis øker både lysstyrken og fargen over tid før alarmen ringer, blir det lettere å stå opp. Dette skyldes at øynene blir stimulert på en måte som etterligner den naturlige effekten av en soloppgang. Desto lenger lyset er på før alarmen ringer, desto lettere blir morgenoppvåkningen.</p>
+        </div>
+        <div class="sub-part-1">
+            <h3>1.3 Teori</h3>
+            <img src="" alt="SCN sender signaler om lysintensiteten til pinealkjertelen, som frigjør Melatonin (gul linje). Mengden Melatonin i kroppen regulerer søvnrytmen.">
+        </div>
+    </div>
+    <div id="part-2" class="part">
+        <h2>2 Metode</h2>
+        <div class="sub-part-1">
+            <h3>2.1 Undersøkelse i Klasserom</h3>
+            <div class="sub-part-2">
+                <h4>2.1.1 Formål og Hypotese</h4>
+                <p>Denne undersøkelsen skal få et grunnlag for den reelle situasjonen ved oppvåkning hos ungdommer.
+                    Diskusjonen skal oppsummere funnene og bekrefte eller avkrefte at noen ungdommer bruker lang tid på
+                    å stå opp, og at dette har en sammenheng med søvnlengde.</p>
+            </div>
+            <div class="sub-part-2">
+                <h4>2.1.2 Design</h4>
+                <p>Spørreundersøkelsen stilte følgende tre spørsmål:</p>
+                <ol>
+                    <li>Hvor mange alarmer ringer før du står opp?</li>
+                    <li>Hvor lang tid tar det fra første alarm ringer til du er ute av sengen?</li>
+                    <li>Hvor mange timer søvn får du i hverdager?</li>
+                </ol>
+                <p>Spørsmål 1 og 2 ble valgt for å finne prosentandelen av ungdommer som bruker lang og kort tid på å
+                    stå opp. Spørsmål 3 vil finne ut hvor lenge ungdommer sover.</p>
+
+            </div>
+            <div class="sub-part-2">
+                <h4>2.1.3 Datainnsamling</h4>
+                <p>Data ble samlet inn ved å stille hver elev de tre spørsmålene og deretter notere svarene i en tabell
+                    i en rutebok. Etter undersøkelsen ble all data overført til en digital database i <i>Notion</i>, som
+                    deretter ble lastet opp til en annen database i <i>Google Firestore Firebase</i>. Videre bruk av
+                    data skal forklares i Resultater.</p>
+            </div>
+            <div class="sub-part-2">
+                <h4>2.1.4 Etikk</h4>
+                <p>Personidentifiserbar informasjon ble ikke skrevet ned, som navn eller bosted. Dette var for å skape
+                    et trygt miljø hvor alle kunne våre trygge på å svare. Diskusjonen krever ikke personidentifiserbar
+                    informasjon.</p>
+            </div>
+        </div>
+        
+        <div class="sub-part-1">
+            <h3>2.2 Registrering av Morgenoppvåkning  </h3>
+            <div class="sub-part-2">
+                <h4>2.2.1 Formål</h4>
+                <p>Det andre studiet involverte registrering av søvnmønsteret mitt som forsøksperson. Innsamlet data skal analyseres, og ved å undersøke trender og sammenhenger skal analysen bekrefte eller avkrefte hypotesen.</p>
+            </div>
+            <div class="sub-part-2">
+                <h4>2.1.2 Design</h4>
+                <div class="sub-part-3">
+                    <h4>Digital registrering</h4>
+                    <p>Datapunktene ble registrert på smartklokke eller annet digitalt utstyr.</p>
+                    <ul>
+                        <li>
+                            <p><b>Dag</b></p>
+                            <p>Navn på dag ved oppvåkning</p>
+                        </li>
+                        <li>
+                            <p><b>Dato</b></p>
+                            <p>Dato ved oppvåkning</p>
+                        </li>
+                        <li>
+                            <p><b>Sovnet</b></p>
+                            <p>Klokkeslett og dato ved innsovning</p>
+                        </li>
+                        <li>
+                            <p><b>Alarm</b></p>
+                            <p>Klokkeslett og dato for alarm</p>
+                        </li>
+                        <li>
+                            <p><b>Tid</b></p>
+                            <p>Tid i minutter fra alarm ringer til å stå opp</p>
+                        </li>
+                        <li>
+                            <p><b>Romtemperatur</b></p>
+                            <p>Temperaturen i rommet ved oppvåkning</p>
+                        </li>
+                        <li>
+                            <p><b>Søvnlengde</b></p>
+                            <p>Tid med søvn, ekskludert våken tilstand.</p>
+                        </li>
+                        <li>
+                            <p><b>Sykluser</b></p>
+                            <p>Antall fulle søvnsykluser, mellom dyp, kjerne og REM.</p>
+                        </li>
+                        <li>
+                            <p><b>Stadium</b></p>
+                            <p>Siste søvnstadiet rett før oppvåkning</p>
+                        </li>
+                        <li>
+                            <p><b>Kroppstemperatur</b></p>
+                            <p>Temperatur på venstre håndledd ved oppvåkning</p>
+                        </li>
+                        <li>
+                            <p><b>Hvilepuls</b></p>
+                            <p>Gjennomsnittlig puls under søvn</p>
+                        </li>
+                        <li>
+                            <p><b>HRV</b></p>
+                            <p>Heart Rate Variation: viser kroppens stressnivå</p>
+                        </li>
+                        <li>
+                            <p><b>Aktivitet</b></p>
+                            <p>Antall minutter i fysisk aktivitet gjennom dagen</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sub-part-3">
+                    <h4>Personlige Vurderinger</h4>
+                    <p>Datapunktene ble registrert ved personlig vurdering ved morgenoppvåkning eller gjennom dagen.</p>
+                    <ul>
+                        <li>
+                            <div>
+                                <p><b>Skjerm</b></p>
+                                <ul>
+                                    <li><p>&lt;30min</p></li>
+                                    <li><p>&gt;30min</p></li>
+                                </ul>
+                            </div>
+                            <p>Tid fra siste bruk av skjerm frem til leggetid</p>
+                        </li>
+                        <li>
+                            <div>
+                                <p><b>Skjermtype</b></p>
+                                <ul>
+                                    <li><p>Underholdning</p></li>
+                                    <li><p>Produktivitet</p></li>
+                                </ul>
+                            </div>
+                            <p>Kategori for innhold på skjerm</p>
+                        </li>
+                        <li>
+                            <div>
+                                <p><b>Vanskelighetsgrad</b></p>
+                                <ul>
+                                    <li><p>Vanskelig</p></li>
+                                    <li><p>Lett</p></li>
+                                </ul>
+                            </div>
+                            <p>Hvordan oppvåkning føltes</p>
+                        </li>
+                        <li>
+                            <div>
+                                <p><b>Motivasjon</b></p>
+                                <ul>
+                                    <li><p>Lav</p></li>
+                                    <li><p>Høy</p></li>
+                                </ul>
+                            </div>
+                            <p>Hvor motivert forsøksperson var til å stå opp ved alarm</p>
+                        </li>
+                        <li>
+                            <div>
+                                <p><b>Lyd</b></p>
+                                <ul>
+                                    <li><p>Forstyrrende</p></li>
+                                    <li><p>Vanlig Lavt</p></li>
+                                </ul>
+                            </div>
+                            <p>Hvordan støynivå ved oppvåkning ble opplevd</p>
+                        </li>
+                        <li>
+                            <div>
+                                <p><b>Søvnighet</b></p>
+                                <ul>
+                                    <li><p>Sovner</p></li>
+                                    <li><p>Opplagt</p></li>
+                                    <li><p>Sliten</p></li>
+                                    <li><p>Mister Fokus</p></li>
+                                    <li><p>Gjesper</p></li>
+                                </ul>
+                            </div>
+                            <p>Hvor uthvilt forsøksperson følte seg gjennom dagen</p>
+                        </li>
+                        <li>
+                            <div>
+                                <p><b>Lys</b></p>
+                                <ul>
+                                    <li><p>Aldri</p></li>
+                                    <li><p>5 min</p></li>
+                                    <li><p>10 min</p></li>
+                                    <li><p>20 min</p></li>
+                                    <li><p>60 min</p></li>
+                                </ul>
+                            </div>
+                            <p>Tid i minutter fra lys aktiveres frem til alarm ringer</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="sub-part-2">
+                <h4>2.1.3 Datainnsamling</h4>
+                <p>Data ble samlet inn ved å stille hver elev de tre spørsmålene og deretter notere svarene i en tabell
+                    i en rutebok. Etter undersøkelsen ble all data overført til en digital database i <i>Notion</i>, som
+                    deretter ble lastet opp til en annen database i <i>Google Firestore Firebase</i>. Videre bruk av
+                    data skal forklares i Resultater.</p>
+            </div>
+            <div class="sub-part-2">
+                <h4>2.1.4 Etikk</h4>
+                <p>Personidentifiserbar informasjon ble ikke skrevet ned, som navn eller bosted. Dette var for å skape
+                    et trygt miljø hvor alle kunne våre trygge på å svare. Diskusjonen krever ikke personidentifiserbar
+                    informasjon.</p>
+            </div>
+        </div>
+        
+    </div>
 
 
+    <div id="part-4" class="part center">
+
+        <div id="buttons">
+            <div id="filters"></div>
+            <div id="chartTypes"></div>
+            <div id="stats"></div>
+        </div>
+
+        <div id="content"></div>
+    </div>
+
+
+</div>
 {% endblock %}
-    
+
 
 {% block scripts %}
-    <script type="module" src="{{ url_for('static', filename='js/analysis.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/analysis.js') }}"></script>
 {% endblock %}

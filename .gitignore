@@ -165,8 +165,10 @@ bar_image.jpg
 # Node.js
 node_modules/
 
-# CSS
+# Rendered Files
 static/css/*.css
+html/*.html
 
 # Secrets Config
 config/
+

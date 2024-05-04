@@ -1,0 +1,223 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<link rel="stylesheet" href=" {{ url_for('static', filename='css/timeplan.css') }} ">
+{% endblock %}
+
+
+{% block main %}
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2">Kl.</th>
+                
+            </tr>
+            <tr>
+                <th>Mandag</th>
+                <th>Tirsdag</th>
+                <th>Onsdag</th>
+                <th>Torsdag</th>
+                <th>Fredag</th>
+                <th>Lørdag</th>
+                <th>Søndag</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>00</th>
+                <td class="sleep" rowspan="6">Sove</td>
+                <td class="sleep" rowspan="6">Sove</td>
+                <td class="sleep" rowspan="6">Sove</td>
+                <td class="sleep" rowspan="6">Sove</td>
+                <td class="sleep" rowspan="6">Sove</td>
+                <td class="sleep" rowspan="7">Sove</td>
+                <td class="sleep" rowspan="7">Sove</td>
+            </tr>
+            <tr>
+                <th>01</th>
+            </tr>
+            <tr>
+                <th>02</th>
+            </tr>
+            <tr>
+                <th>03</th>
+            </tr>
+            <tr>
+                <th>04</th>
+            </tr>
+            <tr>
+                <th>05</th>
+            </tr>
+            <tr>
+                <th>06</th>
+                <td class="prepration">Forberede til Skole</td>
+                <td class="prepration">Forberede til Skole</td>
+                <td class="prepration">Forberede til Skole</td>
+                <td class="prepration">Forberede til Skole</td>
+                <td class="prepration">Forberede til Skole</td>
+            </tr>
+            <tr>
+                <th>07</th>
+                <td class="logistics">Dra til Skole</td>
+                <td class="logistics">Dra til Skole</td>
+                <td class="logistics">Dra til Skole</td>
+                <td class="logistics">Dra til Skole</td>
+                <td class="logistics">Dra til Skole</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>08</th>
+                <td class="school">Skolestart</td>
+                <td class="school">Skolestart</td>
+                <td class="school">Skolestart</td>
+                <td class="school">Skolestart</td>
+                <td class="school">Skolestart</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>09</th>
+                <td class="school" rowspan="2">Skole</td>
+                <td class="school" rowspan="2">Skole</td>
+                <td class="school" rowspan="2">Skole</td>
+                <td class="school" rowspan="2">Skole</td>
+                <td class="school" rowspan="2">Fagdag</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>10</th>
+
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>11</th>
+                <td class="lunch">Lunsj</td>
+                <td class="lunch">Lunsj</td>
+                <td class="lunch">Lunsj</td>
+                <td class="lunch">Lunsj</td>
+                <td class="lunch">Lunsj</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>12</th>
+                <td class="school" rowspan="3">Skole</td>
+                <td class="school" rowspan="3">Skole</td>
+                <td class="school" rowspan="3">Skole</td>
+                <td class="school" rowspan="3">Skole</td>
+                <td class="school" rowspan="2">Fagdag</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>13</th>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>14</th>
+                <td class="school">Skoleslutt</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>15</th>
+                <td class="school">Skoleslutt</td>
+                <td class="school">Skoleslutt</td>
+                <td class="school">Skoleslutt</td>
+                <td class="school">Skoleslutt</td>
+                <td class="logistics">Dra Hjem</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>16</th>
+                <td class="logistics">Dra Hjem</td>
+                <td class="logistics">Dra Hjem</td>
+                <td class="logistics">Dra Hjem</td>
+                <td class="logistics">Dra Hjem</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>17</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>18</th>
+                <td class="exercice" rowspan="2">Basketball</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>19</th>
+
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>20</th>
+                <td></td>
+                <td></td>
+                <td class="exercice" rowspan="2">Basketball</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>21</th>
+                <td class="prepration">Legge meg</td>
+                <td class="prepration">Legge meg</td>
+                <td class="prepration">Legge meg</td>
+                <td class="prepration">Legge meg</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>22</th>
+                <td class="sleep" rowspan="3">Sove</td>
+                <td class="sleep" rowspan="3">Sove</td>
+                <td class="prepration">Legge meg</td>
+                <td class="sleep" rowspan="3">Sove</td>
+                <td class="sleep" rowspan="3">Sove</td>
+                <td class="prepration">Legge meg</td>
+                <td class="prepration">Legge meg</td>
+            </tr>
+            <tr>
+                <th>23</th>
+                <td class="sleep" rowspan="2">Sove</td>
+                <td class="sleep" rowspan="2">Sove</td>
+                <td class="sleep" rowspan="2">Sove</td>
+            </tr>
+            <tr>
+                <th>24</th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

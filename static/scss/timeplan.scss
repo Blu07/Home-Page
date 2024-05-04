@@ -1,0 +1,38 @@
+@import 'index';
+
+main {
+
+    .school {
+        background-color: rgba(208, 255, 0, 0.16);
+    }
+    
+    .logistics {
+        background-color: rgba(0, 102, 255, 0.16);
+    }
+    
+    .sleep {
+        background-color: rgba(140, 0, 255, 0.16);
+    }
+    
+    .prepration {
+        background-color: rgba(0, 255, 191, 0.16);
+    }
+    
+    .lunch {
+        background-color: rgba(255, 115, 0, 0.16);
+    }
+    
+    .exercice {
+        background-color: rgba(255, 0, 55, 0.16);
+    }
+    thead {
+      background-color: $secondary-dark-color;
+    }
+    > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100svh;
+  }
+
+}

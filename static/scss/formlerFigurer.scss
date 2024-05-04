@@ -1,0 +1,33 @@
+@import "index";
+
+main {
+    > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100svh;
+    }
+
+    table {
+        border-collapse: collapse;
+        height: max-content;
+    }
+
+    table, th, td {
+        border: 1px solid $primary-dark-color;
+    }
+
+    thead {
+        background-color: $secondary-dark-color;
+    }
+
+    
+
+    img {
+        max-height: 100px;
+        max-width: 90%;
+        width: auto;
+        justify-self: center;
+        align-self: center;
+    }
+}

@@ -12,24 +12,45 @@ app.secret_key = secret_key
 
 
 projects = [
-    "aboutme",
     "analysis",
-    "feedback",
-    "portfolio",
     "shop",
     "cookies",
-    ]
+    "formlerFigurer",
+    "timeplan",
+]
+
+html_files = [
+    "index",
+    "analysis",
+    "shop",
+    "cookies",
+    "formlerFigurer",
+    "timeplan",
+]
+
 
 
 @app.route('/')
 def index():
-    main_image_filename = main_image()
-    clr_schm = color_scheme(main_image_filename)
     
-    primary_color = clr_schm[0]
-    main_image_url = url_for('static', filename=f'images/main_images/{main_image_filename}')
+    for file in html_files:
+        file_html = f'{file}.html'
+        content = render_template(file_html)
 
-    return render_template('index.html', main_image_url=main_image_url, primary_color=primary_color)
+    
+        with open(f'html/{file_html}', 'w+') as f:
+            f.write(content)
+            print(f"Rendered {file}")
+        
+
+    
+    # main_image_filename = main_image()
+    # clr_schm = color_scheme(main_image_filename)
+    
+    # primary_color = clr_schm[0]
+    # main_image_url = url_for('static', filename=f'images/main_images/{main_image_filename}')
+
+    return render_template('index.html')
 
 
 @app.route('/<path:project_name>')
@@ -41,55 +62,57 @@ def feedback(project_name):
 
 
 
-@app.route("/color_scheme/<string:filename>")
-def color_scheme(filename, mode="light"):
-    if not filename:
-        filename = request.args.get("current")
-    mode = request.args.get("color_mode")
-    clr_schm = extract_colors.color_scheme(filename, mode)
-    return clr_schm
+# @app.route("/color_scheme/<string:filename>")
+# def color_scheme(filename, mode="light"):
+#     if not filename:
+#         filename = request.args.get("current")
+#     mode = request.args.get("color_mode")
+#     clr_schm = extract_colors.color_scheme(filename, mode)
+#     return clr_schm
 
 
-@app.route('/main_image')
-def main_image():
-    args = request.args
-    excluded_img = args.get('current')
+# @app.route('/main_image')
+# def main_image():
+#     args = request.args
+#     excluded_img = args.get('current')
     
-    for _, _, filenames in os.walk(f'static/images/main_images'):
-        if not excluded_img:
-            return random.choice(filenames)
+#     for _, _, filenames in os.walk(f'static/images/main_images'):
+#         if not excluded_img:
+#             return random.choice(filenames)
         
-        filenames.remove(excluded_img)
-        new_image_filename = random.choice(filenames)
+#         filenames.remove(excluded_img)
+#         new_image_filename = random.choice(filenames)
 
-        return {'new_image_filename': new_image_filename}
+#         return {'new_image_filename': new_image_filename}
 
 
-@app.route('/load_bar_image')
-def load_bar_image():
-    args = request.args
-    image_height = int(args.get('image_height'))
-    bar_height = int(args.get('bar_height'))
-    width = int(args.get('screen_width'))
-    image_filename = str(args.get('filename'))
-    sections_num = int(args.get('sections_num'))
+# @app.route('/load_bar_image')
+# def load_bar_image():
+#     args = request.args
+#     image_height = int(args.get('image_height'))
+#     bar_height = int(args.get('bar_height'))
+#     width = int(args.get('screen_width'))
+#     image_filename = str(args.get('filename'))
+#     sections_num = int(args.get('sections_num'))
     
-    colors = extract_colors.sections(image_filename, sections_num, image_height, bar_height, width)
+#     colors = extract_colors.sections(image_filename, sections_num, image_height, bar_height, width)
     
 
-    return colors
+#     return colors
 
 
-@app.route('/analysisJSON')
-def anaylsisCSV():
+# @app.route('/analysisJSON')
+# def anaylsisCSV():
     
-    with open('uploads/analysisNotion.json') as file:
-        return jsonify(json.load(file))
+#     with open('uploads/analysisNotion.json') as file:
+#         return jsonify(json.load(file))
 
 
-@app.route('/database')
-def database():
-    return send_from_directory('static/js', 'analysis.js', mimetype='application/javascript')
+# @app.route('/database')
+# def database():
+#     return send_from_directory('static/js', 'analysis.js', mimetype='application/javascript')
+
+
 
 
 

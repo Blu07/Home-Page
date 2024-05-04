@@ -14,18 +14,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <title>Hjemmeside</title>
 
-    <style>
+    <!-- <style>
         #top-bar,
         #image-btn {
-            background-color: {
-                    {
-                    primary_color
-                }
-            }
-
-            ;
+            background-color: {{ primary_color }};
         }
-    </style>
+    </style> -->
 
     {% endblock %}
 
@@ -40,13 +34,13 @@
 
         {% block main %}
         <div id="top-image">
-            <img id="main-image" src="{{ main_image_url }}" alt="Main Image">
-
+            <img id="main-image" src="{{ url_for('static', filename='images/main_images/001.png') }}" alt="Main Image">
+<!-- 
             <button id="change-image-btn" class="bg-primary" onclick="changeMainImage()">
                 <img id="change-image-btn-icon" src="{{ url_for('static', filename='images/reload.png') }}"
-                    alt="Reload Icon">
-                <p id="image-btn-p">Change Image</p>
-            </button>
+                alt="Reload Icon">
+                Change Image
+            </button> -->
             <!--             
                 <div class="colors">
                     <div class="bg-primary">Primary Color</div>
@@ -74,31 +68,30 @@
             </div>
             <div id="portfolio-list" class="content-block">
 
-                <div class="card project">
-                    <h2>Shop</h2>
-                    <a href="/shop"> Go to Shop </a>
-                </div>
-                <div class="card project">
-                    <h2>Analysis</h2>
-                    <p>Analysis of wakening up using a smart light bulb.</p>
-                    <a href="/analysis"> Go to Analysis </a>
-                </div>
-                <div class="card project">
-                    <h2>Cookies</h2>
-                    <a href="/cookies"> Read the article </a>
-                </div>
-                <div class="card project">
-                    <h2>project name</h2>
-                    <a href="/"> Go to project page </a>
-                </div>
-                <div class="card project">
-                    <h2>project name</h2>
-                    <a href="/"> Go to project page </a>
-                </div>
-                <div class="card project">
-                    <h2>project name</h2>
-                    <a href="/"> Go to project page </a>
-                </div>
+                <a class="card project" href="/shop.html">
+                    <h2> Shop </h2>
+                    <p> Storing cart using cookies </p>
+                </a>
+                <a class="card project" href="/analysis.html">
+                    <h2> Analysis </h2>
+                    <p> Analysis of wakening up using a smart light bulb. </p>
+                </a>
+                <a class="card project" href="/cookies.html">
+                    <h2> Cookies </h2>
+                    <p> Cookies are files downloaded to a user's computer which stores tracking information about their usage on the website. </p>
+                </a>
+                <a class="card project" href="/formlerFigurer.html">
+                    <h2> Figurer </h2>
+                    <p> Formler for Areal og Omkrets av venlige geometriske figurer. </p>
+                </a>
+                <a class="card project" href="/timeplan.html">
+                    <h2>Timeplan</h2>
+                    <p> Min ukentlige timeplan i 2024 </p>
+                </a>
+                <!-- <a class="card project" href="/">
+                    <h2> Project Name </h2>
+                    <p> Description of project. </p>
+                </a> -->
             </div>
         </section>
 
@@ -195,7 +188,7 @@
                                 <label for="guests-num" class="required"> Hvor mange gjester kommer?</label>
                                 <div class="force-next-to-be">
                                     <input type="range" name="Number of Guests" id="guests-num" value="invalid" min="1"
-                                        max="9" oninput="this.nextElementSibling.innerHTML = this.value" required>
+                                        max="9" oninput="this.nextElementSibling.innerHTML = this.value">
                                     <output>?</output>
                                 </div>
                             </div>
@@ -204,7 +197,7 @@
                                 <input type="date" name="Order Date" id="order-date">
                                 <input type="time" name="Order Time" id="order-time">
                             </div>
-                            <div id="food">
+                            <div id="plates">
                                 <h3>Hvilke retter ønsker dere?</h3>
                                 <input type="checkbox" name="Dish" id="amuse-bouche" value="Appetittvekker">
                                 <label for="taco">Appetittvekker</label>
@@ -229,6 +222,7 @@
                         <button type="submit">Send inn</button>
                     </div>
                 </form>
+            </div>
         </section>
 
 
@@ -238,12 +232,10 @@
 
         {% endblock %}
     </main>
+   
     {% block scripts %}
-
     <script src="{{ url_for('static', filename='js/contact.js') }}"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-
-
     {% endblock %}
 </body>
 

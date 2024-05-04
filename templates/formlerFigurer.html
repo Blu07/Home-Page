@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formlerFigurer.css') }}" />
+{% endblock %}
+
+
+{% block main %}
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Navn</th>
+            <th>Figur</th>
+            <th>Omkrets</th>
+            <th>Areal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Trekant</td>
+            <td><img src="{{ url_for('static', filename='images/trekant.png') }}" alt="Bilde av Trekant" /></td>
+            <td>Summen av alle sider</td>
+            <td>(g&#183;h)/2</td>
+          </tr>
+          <tr>
+            <td>Rektangel</td>
+            <td><img src="{{ url_for('static', filename='images/rektangel.png') }}" alt="Bilde av Rektangel" /></td>
+            <td>(a+b)&#183;2</td>
+            <td>a&#183;b</td>
+          </tr>
+          <tr>
+            <td>Trapes</td>
+            <td><img src="{{ url_for('static', filename='images/trapes.png') }}" alt="Bilde av Trapes" /></td>
+            <td>Summen av alle sider</td>
+            <td>((a+b)&#183;h)/2</td>
+          </tr>
+          <tr>
+            <td>Sirkel</td>
+            <td><img src="{{ url_for('static', filename='images/sirkel.png') }}" alt="Bilde av Sirkel" /></td>
+            <td>2&#183;&pi;&#183;r</td>
+            <td>&pi;r^2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

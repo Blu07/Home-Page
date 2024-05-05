@@ -38,7 +38,7 @@ const analytics = getAnalytics(app);
 
 document.addEventListener("DOMContentLoaded", () => {
     // Load Google Chart elements
-    google.charts.load("current", { packages: ["corechart", "line", "bar"] });
+    google.charts.load("current", { packages: ["corechart", "line", "bar", "table"] });
     
     drawButtons("stat", allNumberStats, statButtonsContainer)
     drawButtons("filter", filters, filterButtonsContainer)
@@ -46,22 +46,31 @@ document.addEventListener("DOMContentLoaded", () => {
     
     addEventListener('resize', updateChart)
     
-    google.charts.setOnLoadCallback(updateChart);
+    google.charts.setOnLoadCallback(() => {
+        drawClassQueryTable(container_1)
+        updateChart()
+    });
+    
+    
+    
 });
 
-const container = document.querySelector("#content");
+const container_1 = document.querySelector("#content-1");
+const container_2 = document.querySelector("#content-2");
 const statButtonsContainer = document.querySelector("#stats");
 const filterButtonsContainer = document.querySelector("#filters");
 const chartTypeButtonsContainer = document.querySelector("#chartTypes");
 
+
 const collection_date = collection(db, "home-page", "science-analysis", "By Date")
 const collection_data_point = collection(db, "home-page", "science-analysis", "By Data Point")
+
 
 const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid",]
 allNumberStats.sort()
 
-const filters = ["Chronological", "Weekday"]
-const chartTypes = ["Bar", "Line"]
+const filters = ["Kronologisk", "Ukedag"]
+const chartTypes = ["Bar", "Linje"]
 
 
 async function structureDataByDay(stats) {
@@ -104,15 +113,15 @@ async function structureDataByDay(stats) {
         vAxes: {
             0: { 
                 title: stats[0],
-                viewWindow: {
-                    min: 0 // Ensure Y-axis starts at 0 for the first axis
-                }
+                // viewWindow: {
+                //     min: 0 // Ensure Y-axis starts at 0 for the first axis
+                // }
             },
             1: { 
                 title: stats[1],
-                viewWindow: {
-                    min: 0 // Ensure Y-axis starts at 0 for the second axis
-                }
+                // viewWindow: {
+                //     min: 0 // Ensure Y-axis starts at 0 for the second axis
+                // }
             }
         },
         hAxis: {
@@ -126,7 +135,7 @@ async function structureDataByDay(stats) {
 async function structureDataByDate(stats) {
     const statsToPlot = ["Dato", ...stats]
     const dataList = [statsToPlot];
-
+    
     const q = query(collection_date, orderBy("Dato"))
     const snaphot = await getDocs(q)
 
@@ -145,28 +154,41 @@ async function structureDataByDate(stats) {
         })
         dataList.push(new_line)
     })
+    // Filtering out non-numeric values and then using Math.min() to get the minimum value
+    const lowest_stat1 = Math.min(...dataList.map(list => list[1]).filter(value => typeof value === 'number'));
+    const lowest_stat2 = Math.min(...dataList.map(list => list[2]).filter(value => typeof value === 'number'));
+    const lowest_stat3 = Math.min(...dataList.map(list => list[3]).filter(value => typeof value === 'number'));
+    // console.log(lowest_stat1)
+    // console.log(lowest_stat2)
 
     const data = google.visualization.arrayToDataTable(dataList, false);
     const options = {
         chart: {
             title: 'Kronologiske Statistikker',
-            subtitle: 'Viser verdier for ' + stats.slice(0, -1).join(", ") + "og" + stats[-1],
+            subtitle: 'Viser verdier for ' + (stats.slice(0, -1).join(", ") || "") + (stats.length > 1 ? " og " : "") + stats.slice(-1),
         },
         series: {
             0: { targetAxisIndex: 0 }, // Use numerical indices for targetAxisIndex
-            1: { targetAxisIndex: 1 }
+            1: { targetAxisIndex: 1 },
+            2: { targetAxisIndex: 2 }
         },
         vAxes: {
             0: { 
-                title: stats[0],
+                title: stats[1],
                 viewWindow: {
-                    min: 0 // Ensure Y-axis starts at 0 for the first axis
+                    min: Math.min(0, lowest_stat1) < 0 ? null : 0 // Ensure Y-axis starts at 0 for the second axis if no values are below 0
                 }
             },
             1: { 
                 title: stats[1],
                 viewWindow: {
-                    min: 0 // Ensure Y-axis starts at 0 for the second axis
+                    min: Math.min(0, lowest_stat2) < 0 ? null : 0 // Ensure Y-axis starts at 0 for the second axis if no values are below 0
+                }
+            },
+            2: { 
+                title: stats[1],
+                viewWindow: {
+                    min: Math.min(0, lowest_stat2) < 0 ? null : 0 // Ensure Y-axis starts at 0 for the second axis if no values are below 0
                 }
             }
         },
@@ -183,18 +205,18 @@ function drawChartOfType(data, options, type) {
     let convertedOptions;
 
     switch (type) {
-        case "Line":
-            chart = new google.charts.Line(container);
+        case "Linje":
+            chart = new google.charts.Line(container_2);
             convertedOptions = google.charts.Line.convertOptions(options);
             break;
 
         case "Bar":
-            chart = new google.charts.Bar(container);
+            chart = new google.charts.Bar(container_2);
             convertedOptions = google.charts.Bar.convertOptions(options);
             break;
 
         default:
-            chart = new google.charts.Bar(container);
+            chart = new google.charts.Bar(container_2);
             convertedOptions = google.charts.Bar.convertOptions(options);
             break;
     }
@@ -223,7 +245,7 @@ function drawButtons(type, baseList, containerEL) {
     containerEL.firstChild.classList.add("active")
 }
 
-function registerStatButton(event) {        // , container) {
+function registerStatButton(event) {    // , container) {
     const element = event.target;
     
     // If clicked and active, toggle active off
@@ -263,12 +285,16 @@ async function updateChart() {
     const stats = [...statButtonsContainer.getElementsByClassName("active")].map((v) => v.id);
     const filter = [...filterButtonsContainer.getElementsByClassName("active")][0].id;
     const cType = [...chartTypeButtonsContainer.getElementsByClassName("active")][0].id;
-   
+    
+    if (stats.length == 0) {
+        return false
+    }
+
     // Determine which function to call based on the filter
     let dataOptions;
-    if (filter === "Chronological") {
+    if (filter === "Kronologisk") {
         dataOptions = await structureDataByDate(stats);
-    } else if (filter === "Weekday") {
+    } else if (filter === "Ukedag") {
         dataOptions = await structureDataByDay(stats);
     }
 
@@ -277,14 +303,76 @@ async function updateChart() {
 
     // Now, pass the data and options to drawChartOfType
     drawChartOfType(data, options, cType);
+    
 }
-
 
 function round(num, dec = 2) {
     const dec_fac = Math.pow(10, dec)
     const rounded = Math.round(dec_fac * num) / dec_fac
 
     return rounded
+}
+
+
+async function drawClassQueryTable(container) {
+    
+    const values = [
+        [2,   9,  [7, 50]],
+        [1,  12,  [6, 15]],
+        [1,  20,  [7, 30]],
+        [2,   2,  [8, 25]],
+        [12, 75,  [3,  0]],
+        [2,  12,  [6, 30]],
+        [1,   1,  [6, 50]],
+        [3,  10,  [7,  0]],
+        [14, 30,  [8, 30]],
+        [1,   3,  [7, 45]],
+        [2,   5,  [5, 30]],
+        [2,   5,  [6,  0]],
+        [0,   0,  [7, 50]],
+        [5,  45,  [6,  0]],
+        [12, 60,  [7,  0]],
+        [8,  40,  [6, 30]],
+        [4,  25,  [7,  0]],
+        [1,   5,  [6, 30]],
+        [4,  15,  [6,  0]],
+        [5,  30,  [5, 30]],
+        [5,  30,  [5, 30]],
+        [5,  30,  [6,  0]],
+        [5,  40,  [6,  0]],
+        [3,  18,  [7, 45]],
+        [1,   1,  [7,  0]],
+        [10, 30,  [6,  0]],
+        [1,   1,  [7,  0]],
+        [3,  18,  [8,  0]],
+    ]
+
+
+    const data = new google.visualization.DataTable();
+    data.addColumn('number', 'Alarmer');
+    data.addColumn('number', 'Tid');
+    data.addColumn('number', 'Søvnlengde');
+        
+    
+    values.forEach(row => {
+        const A_V = row[0]
+        const A_F = `${A_V} stk.`
+        const T_V = row[1]
+        const T_F = `${T_V} min`
+        const S_V = row[2][0]*60 + row[2][1]*(3/5)
+        const S_F = `${row[2][0]}:${row[2][1]}`
+        
+        const add_row = [{v: A_V, f: A_F},
+                         {v: T_V, f: T_F},
+                         {v: S_V, f: S_F}]
+        console.log(add_row)
+        data.addRow(add_row);
+    })
+
+    const table = new google.visualization.Table(container);
+    const options = {showRowNumber: true, width: '100%', height: '100%'}
+    table.draw(data, options);
+
 }
 
 // Ubrukte funksjoner, trengs kanskje.

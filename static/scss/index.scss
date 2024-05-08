@@ -69,61 +69,61 @@ main {
             object-fit: cover;
         }
 
-        #change-image-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-flow: column nowrap;
+        // #change-image-btn {
+        //     display: flex;
+        //     align-items: center;
+        //     justify-content: center;
+        //     flex-flow: column nowrap;
 
-            font-size: xx-small;
-            font-weight: 800;
+        //     font-size: xx-small;
+        //     font-weight: 800;
 
-            position: absolute;
-            bottom: 50px;
-            right: 50px;
+        //     position: absolute;
+        //     bottom: 50px;
+        //     right: 50px;
 
-            width: min-content;
-            height: min-content;
+        //     width: min-content;
+        //     height: min-content;
 
-            border: 1.5px solid $accent-light-color;
-            border-radius: $border-radius-large;
+        //     border: 1.5px solid $accent-light-color;
+        //     border-radius: $border-radius-large;
 
-            background-color: rgba($color: white, $alpha: 0.1);
-            backdrop-filter: blur(2px);
+        //     background-color: rgba($color: white, $alpha: 0.1);
+        //     backdrop-filter: blur(2px);
 
-            #change-image-btn-icon {
-                object-fit: contain;
-                width: 90%;
-                height: 90%;
-            }
-        }
+        //     #change-image-btn-icon {
+        //         object-fit: contain;
+        //         width: 90%;
+        //         height: 90%;
+        //     }
+        // }
 
-        .colors {
-            display: none; // Hide for production
-            // display: flex;
-            flex-flow: row wrap;
-            justify-content: center;
-            align-items: center;
+        // .colors {
+        //     display: none; // Hide for production
+        //     // display: flex;
+        //     flex-flow: row wrap;
+        //     justify-content: center;
+        //     align-items: center;
 
-            padding: 20px;
-            box-sizing: border-box;
+        //     padding: 20px;
+        //     box-sizing: border-box;
 
-            position: relative;
-            bottom: 200px;
+        //     position: relative;
+        //     bottom: 200px;
 
-            width: fit-content;
-            height: 100px;
+        //     width: fit-content;
+        //     height: 100px;
 
-            background-color: $primary-light-color;
-            box-sizing: border-box;
+        //     background-color: $primary-light-color;
+        //     box-sizing: border-box;
 
-            div {
-                width: 70px;
-                height: 100%;
-                border-radius: $border-radius-small;
-                box-sizing: border-box;
-            }
-        }
+        //     div {
+        //         width: 70px;
+        //         height: 100%;
+        //         border-radius: $border-radius-small;
+        //         box-sizing: border-box;
+        //     }
+        // }
     }
 
     #top-bar {

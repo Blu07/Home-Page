@@ -108,8 +108,8 @@ function handleProperty(prop) {
             return handleNumber(prop);
         case "date":
             return handleDate(prop);
-        case "multi_select":
-            return handleMultiSelect(prop);
+        // case "multi_select":
+        //     return handleMultiSelect(prop);
         case "title":
             return handleTitle(prop);
         default:
@@ -125,14 +125,20 @@ function handleSelect(prop) {
         Underholdning: 0,
         Produktivitet: 1,
 
-        Lett: 0,
-        Vanskelig: 1,
+        Vanskelig: 0,
+        Lett: 1,
 
         Lav: 0,
         Høy: 1,
 
-        "Vanlig lavt": 0,
-        Forstyrrelser: 1,
+        Forstyrrelser: 0,
+        "Vanlig lavt": 1,
+
+        "5 min": 5,
+        "10 min": 10,
+        "20 min": 20,
+        "60 min": 60,
+        "Aldri": 0,
 
         Opplagt: 0.9,
         Gjesper: 0.8,
@@ -145,11 +151,12 @@ function handleSelect(prop) {
         Deep: 3,
     };
 
-    return prop.select.name;
-    // return name_value[prop.select.name];
+    // return prop.select.name;
+    return name_value[prop.select.name];
 }
 
 function handleNumber(prop) {
+    console.log(prop.id)
     if (prop.id === '%3DS%3DL') {
         return timeToDecimal(prop.number)
     }
@@ -161,9 +168,9 @@ function handleDate(prop) {
     return new Date(prop.date.start).toISOString();
 }
 
-function handleMultiSelect(prop) {
-    return prop.multi_select.map((s) => s.name);
-}
+// function handleMultiSelect(prop) {
+//     return prop.multi_select.map((s) => s.name);
+// }
 
 function handleTitle(prop) {
     if (prop.title[0] !== undefined) {

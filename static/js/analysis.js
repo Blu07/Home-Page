@@ -66,7 +66,7 @@ const collection_date = collection(db, "home-page", "science-analysis", "By Date
 const collection_data_point = collection(db, "home-page", "science-analysis", "By Data Point")
 
 
-const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid",]
+const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid", "Vanskelighetsgrad", "Motivasjon", "Lyd", "Sovnighet", "Lys", "Alarm", "Sovnet", "Skjerm", "Skjermtype"]
 allNumberStats.sort()
 
 const filters = ["Kronologisk", "Ukedag"]

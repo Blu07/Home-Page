@@ -33,7 +33,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -41,8 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
     google.charts.load("current", { packages: ["corechart", "line", "bar", "table"] });
     
     drawButtons("stat", allNumberStats, statButtonsContainer)
-    drawButtons("filter", filters, filterButtonsContainer)
-    drawButtons("chartType", chartTypes, chartTypeButtonsContainer)
+    drawButtons("filter", timeline, filterButtonsContainer)
+    drawButtons("showDifference", differenceName, differenceContainer)
+    drawButtons("chartType", displayTypes, chartTypeButtonsContainer)
     
     addEventListener('resize', updateChart)
     
@@ -60,6 +61,7 @@ const container_2 = document.querySelector("#content-2");
 const statButtonsContainer = document.querySelector("#stats");
 const filterButtonsContainer = document.querySelector("#filters");
 const chartTypeButtonsContainer = document.querySelector("#chartTypes");
+const differenceContainer = document.querySelector("#differenceToggle");
 
 
 const collection_date = collection(db, "home-page", "science-analysis", "By Date")
@@ -69,8 +71,9 @@ const collection_data_point = collection(db, "home-page", "science-analysis", "B
 const allNumberStats = ["Hvilepuls", "HRV", "Aktivitet", "Sovnlengde", "Kroppstemperatur", "Romtemperatur", "Sykluser", "Tid", "Vanskelighetsgrad", "Motivasjon", "Lyd", "Sovnighet", "Lys", "Alarm", "Sovnet", "Skjerm", "Skjermtype"]
 allNumberStats.sort()
 
-const filters = ["Kronologisk", "Ukedag"]
-const chartTypes = ["Bar", "Linje"]
+const timeline = ["Kronologisk", "Ukedag"]
+const displayTypes = ["Bar", "Linje"]
+const differenceName = ["Differanse"]
 
 
 async function structureDataByDay(stats) {
@@ -100,7 +103,7 @@ async function structureDataByDay(stats) {
     resolvedDays.forEach(dayData => dataList.push(dayData));
 
     // Now that we have all the data
-    const data = google.visualization.arrayToDataTable(dataList, false);
+    // const data = google.visualization.arrayToDataTable(dataList, false);
     const options = {
         chart: {
             title: 'Daglige Statistikker',
@@ -129,16 +132,19 @@ async function structureDataByDay(stats) {
         }
     };
     
-    return [data, options]
+    return [dataList, options]
 }
 
-async function structureDataByDate(stats) {
+async function structureDataChronologically(stats) {
+    // Utgangspunkt
     const statsToPlot = ["Dato", ...stats]
     const dataList = [statsToPlot];
     
+    // Query
     const q = query(collection_date, orderBy("Dato"))
     const snaphot = await getDocs(q)
 
+    // Behandle Data
     snaphot.forEach(doc => {
         const data = doc.data()
         const new_line = []
@@ -154,14 +160,15 @@ async function structureDataByDate(stats) {
         })
         dataList.push(new_line)
     })
+
     // Filtering out non-numeric values and then using Math.min() to get the minimum value
     const lowest_stat1 = Math.min(...dataList.map(list => list[1]).filter(value => typeof value === 'number'));
     const lowest_stat2 = Math.min(...dataList.map(list => list[2]).filter(value => typeof value === 'number'));
-    const lowest_stat3 = Math.min(...dataList.map(list => list[3]).filter(value => typeof value === 'number'));
+    // const lowest_stat3 = Math.min(...dataList.map(list => list[3]).filter(value => typeof value === 'number'));
     // console.log(lowest_stat1)
     // console.log(lowest_stat2)
 
-    const data = google.visualization.arrayToDataTable(dataList, false);
+    // const data = google.visualization.arrayToDataTable(dataList, false);
     const options = {
         chart: {
             title: 'Kronologiske Statistikker',
@@ -197,7 +204,7 @@ async function structureDataByDate(stats) {
         }
     };
     
-    return [data, options]
+    return [dataList, options]
 }
 
 function drawChartOfType(data, options, type) {
@@ -236,13 +243,16 @@ function drawButtons(type, baseList, containerEL) {
             btnEl.addEventListener('click', (event) => registerStatButton(event, containerEL))
         } else if (type === "filter" || type === "chartType") {
             btnEl.addEventListener('click', (event) => registerFilterBtnPress(event, containerEL))
+        } else if (type === "showDifference") {
+            btnEl.addEventListener('click', (event) => registerToggleBtnPress(event, containerEL))
         } else {
             console.error(`Button Type not recognised: ${type}`)
         }
     })
 
     // Automatically select the first element as active in Filters and Chart Types
-    containerEL.firstChild.classList.add("active")
+    // containerEL.firstChild.classList.add("active")
+    
 }
 
 function registerStatButton(event) {    // , container) {
@@ -281,38 +291,17 @@ function registerFilterBtnPress(event, container) {
     }
 }
 
-async function updateChart() {
-    const stats = [...statButtonsContainer.getElementsByClassName("active")].map((v) => v.id);
-    const filter = [...filterButtonsContainer.getElementsByClassName("active")][0].id;
-    const cType = [...chartTypeButtonsContainer.getElementsByClassName("active")][0].id;
-    
-    if (stats.length == 0) {
-        return false
+function registerToggleBtnPress(event, container) {
+    const active = container.getElementsByClassName("active").length == 1;
+    const element = event.target;
+
+    if (active) {
+        element.classList.remove("active");
+    } else {
+        element.classList.add("active");
     }
-
-    // Determine which function to call based on the filter
-    let dataOptions;
-    if (filter === "Kronologisk") {
-        dataOptions = await structureDataByDate(stats);
-    } else if (filter === "Ukedag") {
-        dataOptions = await structureDataByDay(stats);
-    }
-
-    // Destructure the returned array to get data and options
-    const [data, options] = dataOptions;
-
-    // Now, pass the data and options to drawChartOfType
-    drawChartOfType(data, options, cType);
-    
+    updateChart()
 }
-
-function round(num, dec = 2) {
-    const dec_fac = Math.pow(10, dec)
-    const rounded = Math.round(dec_fac * num) / dec_fac
-
-    return rounded
-}
-
 
 async function drawClassQueryTable(container) {
     
@@ -365,7 +354,6 @@ async function drawClassQueryTable(container) {
         const add_row = [{v: A_V, f: A_F},
                          {v: T_V, f: T_F},
                          {v: S_V, f: S_F}]
-        console.log(add_row)
         data.addRow(add_row);
     })
 
@@ -374,6 +362,55 @@ async function drawClassQueryTable(container) {
     table.draw(data, options);
 
 }
+
+async function updateChart() {
+    const stats = [...statButtonsContainer.getElementsByClassName("active")].map(v => v.id);
+    const filter = [...filterButtonsContainer.getElementsByClassName("active")][0].id;
+    const displayType = [...chartTypeButtonsContainer.getElementsByClassName("active")][0].id;
+    const showDifference = differenceContainer.getElementsByClassName("active").length == 1;
+
+    // Early return if no stats selected
+    if (stats.length == 0) {
+        return false
+    }
+    
+    // Determine which function to call based on the filter
+    let dataOptions;
+    if (filter === "Kronologisk") {
+        dataOptions = await structureDataChronologically(stats);
+    } else if (filter === "Ukedag") {
+        dataOptions = await structureDataByDay(stats);
+    }
+    
+    // Destructure the returned array to get data and options
+    const [data, options] = dataOptions;
+    
+    // Add difference 
+    if (showDifference) {
+        data.slice().forEach((row, index) => {
+            if (index == 0) {
+                data[0].push(differenceName[0])
+            } else {
+                // index + 1 to add a new column at the end of the array
+                data[index].push(row[2] - row[1])
+            }
+        })   
+    }
+
+    const chartTable = google.visualization.arrayToDataTable(data, false)
+
+    // Now, pass the data and options to drawChartOfType
+    drawChartOfType(chartTable, options, displayType);
+    
+}
+
+function round(num, dec = 2) {
+    const dec_fac = Math.pow(10, dec)
+    const rounded = Math.round(dec_fac * num) / dec_fac
+
+    return rounded
+}
+
 
 // Ubrukte funksjoner, trengs kanskje.
 

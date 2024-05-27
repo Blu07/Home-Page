@@ -385,7 +385,7 @@ async function updateChart() {
     // Destructure the returned array to get data and options
     const [data, options] = dataOptions;
     
-    // Add difference 
+    // Add difference if toggle is active
     if (showDifference) {
         data.slice().forEach((row, index) => {
             if (index == 0) {

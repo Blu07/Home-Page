@@ -1,0 +1,92 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>        
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/digitalNorway.css') }}">
+{% endblock %}
+
+
+{% block main %}
+<div id="main-centered">
+
+<div id="all-content">
+    
+    <p> Digital Norway invites you to a Tech Breakfast with free admission for an entertaining lecture on a serious topic</p>
+    <h1>Can Artificial Intelligence Save Lives?</h1>
+
+    <h2>Time and Place</h2>
+    <p>Rebel, Oslo</p>
+    <p>Thursday, May 30, 2024</p>
+    <p>09:00 - 10:00</p>
+
+    <h2>Speakers</h2>
+    <p>Eva Avokander</p>
+    <p>Sitrus Sitronius</p>
+
+
+<div class="buttons">
+    <button class="btn" id="open-registration-btn"> Open Registration Form </button>
+    <button class="btn" id="open-graph-btn"> See Registrants </button>
+</div>
+
+<div id="pop-up">
+    <button id="close">X</button>
+    <div class="kort" id="registration">
+        
+        <h1>Registration</h1>
+        
+        <form id="form">
+            <div class="input_wrapper">
+            <!-- Name -->
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required class ="text_input"/>
+            </div>
+                
+            <!-- Phone -->
+            <div>
+                <label for="tel">Phone Number</label>
+                <input type="tel" id="tel" name="tel" placeholder="123 45 678"/>
+            </div>
+            <!-- Member (True|False) -->
+            <div>
+                <label for="member">Are you a member?</label>
+                <input type="checkbox" id="member" name="member"/>
+            </div>
+    
+            <!-- Email -->
+            <div>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="john@example.com"/>
+            </div>
+        </div>
+        
+        
+        <input type="submit" id="send" name="send" value="Register"/>
+        
+    </form>
+    
+    <input type="button" id="remove" name="remove" value="I can't make it after all"/>
+    
+</div>
+
+<div class="kort" id="graph">
+        <div id="content">
+            Loading Graph
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/digitalNorway.js') }}"></script>
+{% endblock %}

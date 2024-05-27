@@ -1,0 +1,85 @@
+@import "index";
+
+#main-centered {
+
+    margin-top: 20px;
+
+    display: flex;
+    flex-flow: column wrap;
+    
+    justify-content: center;
+    align-content: center;
+    
+    #all-content {
+        display: flex;
+        align-items: center;
+        flex-flow: column nowrap;
+
+        gap: 10px;
+
+        width: min(61.8svw, 750px);
+        height: max-content;
+    }
+}
+
+p {
+    margin: 0px;
+    line-height: 150%;
+}
+
+
+h2 {
+    margin-bottom: 0px;
+}
+
+#all_content >button {
+    background-color: $primary-light-color-darker;
+    border-radius: $border-radius-small;
+    border: 0.5px solid black;
+
+}
+
+#close {
+    background-color: red;
+    border-radius: $border-radius-small;
+
+
+    position: absolute;
+    top: -5px;
+    right: -5px;
+
+    z-index: 10;
+}
+
+#pop-up {
+    display: none;
+    
+    position: absolute;
+    top: 35svh;
+    
+    background-color: $primary-light-color-darker;
+    border-radius: $border-radius-large;
+    
+    width: min-content;
+    height: fit-content;
+    
+    padding: 10px;
+}
+
+.kort#graph {
+    width: min-content;
+    min-width: 400px;
+    height: 200px;
+
+    #content {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+
+.input_wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    gap:10px;
+}

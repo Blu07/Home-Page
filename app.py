@@ -17,22 +17,16 @@ projects = [
     "cookies",
     "formlerFigurer",
     "timeplan",
+    "digitalNorway"
 ]
 
-html_files = [
-    "index",
-    "analysis",
-    "shop",
-    "cookies",
-    "formlerFigurer",
-    "timeplan",
-]
 
 
 
 @app.route('/')
 def index():
-    
+    html_files = projects + ["index"] 
+    print(html_files)
     for file in html_files:
         file_html = f'{file}.html'
         content = render_template(file_html)

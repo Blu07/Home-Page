@@ -88,6 +88,10 @@
                     <h2>Timeplan</h2>
                     <p> Min ukentlige timeplan i 2024 </p>
                 </a>
+                <a class="card project" href="/digitalNorway.html">
+                    <h2> Tech-Frokost </h2>
+                    <p> Digital Norway inviterer til Tech-Frokost med tema "Kan Kunstig Intelligens redde liv?"</p>
+                </a>
                 <!-- <a class="card project" href="/">
                     <h2> Project Name </h2>
                     <p> Description of project. </p>
@@ -146,9 +150,9 @@
                             <input type="text" name="Last Name" id="l_name" placeholder="Etternavn"
                                 autocomplete="family-name" required>
                             <br>
-                            <label for="b_date">Hva er fødselsdatoen din?</label>
+                            <!-- <label for="b_date">Hva er fødselsdatoen din?</label>
                             <input type="date" name="Birth Date" id="b_date" autocomplete="bday">
-                            <br>
+                            <br> -->
                             <label for="email" class="required">E-postadressen din:</label>
                             <input type="email" name="E-mail" id="email" autocomplete="email"
                                 placeholder="navnet.ditt@eksempel.no" required>
@@ -157,10 +161,14 @@
                             <input type="number" name="Phone Number" id="phone_num" autocomplete="tel"
                                 placeholder="+47 197 45 374">
                             <br>
+                            <div id="message-div">
+                                <textarea name="message" id="message" rows="7" cols="50" placeholder="Vennligst skriv din melding her."></textarea>
+                            </div>
+                            <br>
                             <br>
                         </div>
-                        <div style="width: 100%; margin: 0px"></div>
-                        <div id="food">
+                        <div style="width: 100%; margin: 0px"></div>            
+                        <!-- <div id="food">
                             <h3>Hvilken mat liker du?</h3>
                             <input type="checkbox" name="Liked Foods" id="taco" value="Taco">
                             <label for="taco">Taco</label>
@@ -216,7 +224,7 @@
                                 <br>
                                 <br>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div id="submit">
                         <button type="submit">Send inn</button>

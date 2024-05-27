@@ -254,10 +254,10 @@ function init() {
     updateActiveLink();
 
     // Top-bar colour gradient
-    changeTopBar();
-    addResizeListener();
+    // changeTopBar();
+    // addResizeListener();
 
-    changeColorScheme();
+    // changeColorScheme();
 
 }
 

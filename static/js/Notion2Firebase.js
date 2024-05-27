@@ -119,20 +119,20 @@ function handleProperty(prop) {
 
 function handleSelect(prop) {
     name_value = {
-        "<30min": 0,
-        ">30min": 1,
+        "<30min": 0.5,
+        ">30min": 0.7,
 
-        Underholdning: 0,
-        Produktivitet: 1,
+        Underholdning: 0.5,
+        Produktivitet: 0.7,
 
-        Vanskelig: 0,
-        Lett: 1,
+        Vanskelig: 0.5,
+        Lett: 0.7,
 
-        Lav: 0,
-        Høy: 1,
+        Lav: 0.5,
+        Høy: 0.7,
 
-        Forstyrrelser: 0,
-        "Vanlig lavt": 1,
+        Forstyrrelser: 0.5,
+        "Vanlig lavt": 0.7,
 
         "5 min": 5,
         "10 min": 10,

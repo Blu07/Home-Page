@@ -13,6 +13,7 @@ app.secret_key = secret_key
 
 projects = [
     "analysis",
+    "grocery",
     "shop",
     "cookies",
     "formlerFigurer",

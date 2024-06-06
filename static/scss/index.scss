@@ -255,7 +255,7 @@ main {
                 .card {
                     display: grid;
                     grid-template-columns: 100%;
-                    grid-template-rows: 40px 1fr;
+                    grid-template-rows: min-content 1fr;
                     gap: 5px;
 
                     width: 200px;
